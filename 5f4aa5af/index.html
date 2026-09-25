@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>6 → 7 Pool Party · Oct 17</title>
+<meta name="theme-color" content="#2AA7D8">
+<style>
+  :root{
+    --pink:#E8398C; --pink-l:#FF7EB9; --blue:#2AA7D8; --blue-l:#8FE3FA;
+    --yellow:#FFD86B; --green:#7ED8A0; --ink:#5B3A22;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Trebuchet MS",Verdana,system-ui,sans-serif;
+    background:linear-gradient(#FFE3F1 0%,#FFF4D6 45%,#BDEBFF 100%);
+    color:var(--ink); overflow-x:hidden; min-height:100vh;
+  }
+  .wrap{max-width:820px;margin:0 auto;position:relative;padding:0 0 40px}
+
+  /* bunting */
+  .bunting{width:100%;height:110px;display:block}
+
+  h1{
+    text-align:center;margin:4px 16px 0;font-size:clamp(34px,8vw,62px);
+    color:var(--pink);-webkit-text-stroke:0; letter-spacing:1px;
+    text-shadow:0 3px 0 #fff,0 6px 14px rgba(232,57,140,.25);
+  }
+
+  /* 6 -> 7 */
+  .six7{display:flex;align-items:center;justify-content:center;gap:clamp(6px,3vw,26px);margin:8px 0 0}
+  .num{
+    font-size:clamp(110px,30vw,230px);font-weight:bold;line-height:.95;
+    text-shadow:0 6px 0 #fff,0 10px 22px rgba(0,0,0,.12);
+    cursor:pointer;user-select:none;transition:transform .15s;
+  }
+  .num:active{transform:scale(.92)}
+  .num.six{color:var(--blue)}
+  .num.sev{color:var(--pink)}
+  .arrow{font-size:clamp(40px,10vw,90px);color:var(--yellow);text-shadow:0 4px 0 #fff}
+  .tag{text-align:center;font-size:clamp(20px,5vw,38px);font-weight:bold;color:var(--blue);margin:0 14px}
+  .sub{text-align:center;font-size:clamp(14px,3.6vw,22px);font-weight:bold;color:var(--pink);margin:8px 14px 14px}
+
+  /* countdown */
+  .count{display:flex;justify-content:center;gap:clamp(6px,2.5vw,16px);margin:6px 12px 18px;flex-wrap:nowrap}
+  .cbox{background:#fff;border:4px solid var(--pink-l);border-radius:18px;padding:8px clamp(6px,2.5vw,18px);min-width:clamp(62px,19vw,96px);text-align:center;box-shadow:0 4px 0 rgba(232,57,140,.18)}
+  .cnum{font-size:clamp(24px,7vw,40px);font-weight:bold;color:var(--blue);line-height:1.05}
+  .clab{font-size:clamp(10px,2.6vw,13px);letter-spacing:1px;color:var(--pink);text-transform:uppercase}
+
+  /* pool */
+  .pool{position:relative;margin-top:-6px}
+  .pool svg{display:block;width:100%;height:auto}
+  .swimmer{width:min(420px,78vw);display:block;margin:-13vw auto -4vw;position:relative;z-index:3;
+    animation:bob 3.4s ease-in-out infinite;transform-origin:50% 80%}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-12px) rotate(1.5deg)}}
+  .water{background:linear-gradient(#6FD8F2,#2AA7D8);padding:0 0 26px;margin-top:-2px}
+
+  /* card */
+  .card{
+    background:#fff;border:6px solid var(--pink-l);border-radius:28px;
+    margin:0 14px;padding:20px 16px 22px;text-align:center;
+    box-shadow:0 10px 0 rgba(0,0,0,.08);position:relative;z-index:4;
+  }
+  .when{font-size:clamp(22px,5.6vw,38px);font-weight:bold;color:var(--pink);margin:0}
+  .time{font-size:clamp(22px,5.4vw,34px);font-weight:bold;color:var(--blue);margin:6px 0 10px}
+  .addr{font-size:clamp(15px,3.8vw,22px);font-weight:bold;margin:0 0 4px}
+  .bring{font-size:clamp(13px,3.2vw,17px);margin:8px 0 0;opacity:.85}
+  .rsvp{font-size:clamp(14px,3.6vw,20px);font-weight:bold;color:var(--pink);margin:14px 0 0}
+
+  .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:16px 0 0}
+  .btn{
+    appearance:none;border:none;cursor:pointer;text-decoration:none;
+    font:inherit;font-weight:bold;font-size:clamp(14px,3.4vw,17px);
+    color:#fff;background:var(--pink);padding:13px 18px;border-radius:999px;
+    box-shadow:0 4px 0 rgba(0,0,0,.15);transition:transform .12s, box-shadow .12s;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+  .btn.blue{background:var(--blue)} .btn.green{background:#3FA76B} .btn.purple{background:#7A69E6}
+
+  .fun{margin:22px 14px 0;text-align:center}
+  .fun h2{color:#fff;font-size:clamp(17px,4.2vw,24px);margin:0 0 10px;text-shadow:0 2px 6px rgba(0,0,0,.2)}
+  .meter{background:rgba(255,255,255,.9);border-radius:999px;height:26px;overflow:hidden;max-width:520px;margin:0 auto;border:3px solid #fff}
+  .fill{height:100%;width:0;background:linear-gradient(90deg,var(--yellow),var(--pink-l),var(--blue-l));transition:width .35s}
+  .hint{color:#fff;font-size:13px;margin:8px 0 0;opacity:.95}
+
+  footer{text-align:center;color:#fff;opacity:.9;font-size:12px;margin:22px 14px 0}
+  .confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+  .cf{position:absolute;width:10px;height:14px;border-radius:2px;will-change:transform}
+  @media (prefers-reduced-motion:reduce){.swimmer{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <svg class="bunting" viewBox="0 0 1200 110" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 18 Q300 118 600 62 Q900 6 1200 96" stroke="#E8398C" stroke-width="7" fill="none"/>
+    <polygon points="140,58 190,71 158,111" fill="#FF7EB9"/>
+    <polygon points="290,98 340,103 306,145" fill="#FFD86B"/>
+    <polygon points="440,103 490,98 462,145" fill="#7ED8A0"/>
+    <polygon points="590,64 640,56 618,104" fill="#9B8CFF"/>
+    <polygon points="740,32 790,32 766,78" fill="#6FD8F2"/>
+    <polygon points="890,40 940,50 908,92" fill="#FF7EB9"/>
+    <polygon points="1040,66 1090,78 1058,118" fill="#FFD86B"/>
+  </svg>
+
+  <h1>YOU'RE INVITED!</h1>
+
+  <div class="six7">
+    <span class="num six" id="six">6</span>
+    <span class="arrow">→</span>
+    <span class="num sev" id="sev">7</span>
+  </div>
+  <p class="tag">SIX SEVEN POOL PARTY!</p>
+  <p class="sub">Come do the 6–7 with me in the pool 🙌</p>
+
+  <div class="count" id="count">
+    <div class="cbox"><div class="cnum" id="d">–</div><div class="clab">days</div></div>
+    <div class="cbox"><div class="cnum" id="h">–</div><div class="clab">hours</div></div>
+    <div class="cbox"><div class="cnum" id="m">–</div><div class="clab">mins</div></div>
+    <div class="cbox"><div class="cnum" id="s">–</div><div class="clab">secs</div></div>
+  </div>
+
+  <div class="pool">
+    <svg viewBox="0 0 1200 90" preserveAspectRatio="none" aria-hidden="true" style="height:70px">
+      <path d="M0 40 Q150 0 300 40 T600 40 T900 40 T1200 40 L1200 90 L0 90 Z" fill="#6FD8F2"/>
+      <path d="M0 62 Q150 22 300 62 T600 62 T900 62 T1200 62" stroke="#CFF4FF" stroke-width="8" fill="none" opacity=".6"/>
+    </svg>
+  </div>
+
+  <div class="water">
+    <!-- cartoon birthday girl in a 67 swim ring -->
+    <svg class="swimmer" viewBox="0 0 520 470" role="img" aria-label="Cartoon of the birthday girl in a 67 swim ring">
+      <g transform="translate(260,300)">
+        <g stroke="#F7D3B4" stroke-width="34" stroke-linecap="round" fill="none">
+          <path d="M-58 -60 L-150 -180"/><path d="M58 -60 L150 -180"/>
+        </g>
+        <circle cx="-158" cy="-196" r="27" fill="#F7D3B4"/>
+        <circle cx="158" cy="-196" r="27" fill="#F7D3B4"/>
+        <ellipse cx="0" cy="-70" rx="78" ry="80" fill="#FF7EB9"/>
+        <g transform="translate(0,-168)">
+          <path d="M-104 -6 q-6 -116 104 -116 q110 0 104 116 q4 82 -18 96 q-10 -70 -20 -96 l-132 0 q-12 28 -20 96 q-22 -14 -18 -96 z" fill="#241a16"/>
+          <ellipse cx="-96" cy="52" rx="24" ry="52" fill="#241a16"/>
+          <ellipse cx="96" cy="52" rx="24" ry="52" fill="#241a16"/>
+          <ellipse cx="0" cy="8" rx="88" ry="92" fill="#F7D3B4"/>
+          <path d="M-92 -8 q4 -96 92 -96 q92 0 94 92 q-28 -54 -86 -44 q-42 8 -54 40 q-14 22 -46 8 z" fill="#241a16"/>
+          <path d="M-58 14 q22 -28 44 0" stroke="#241a16" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M14 14 q22 -28 44 0" stroke="#241a16" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <ellipse cx="-66" cy="48" rx="18" ry="11" fill="#FF9FCB" opacity=".7"/>
+          <ellipse cx="66" cy="48" rx="18" ry="11" fill="#FF9FCB" opacity=".7"/>
+          <path d="M-46 50 q46 60 92 0 q-46 16 -92 0 z" fill="#B0443F"/>
+          <path d="M-42 51 q42 12 84 0 l-6 14 q-36 10 -72 0 z" fill="#fff"/>
+          <g transform="translate(-74,-58) rotate(-18)">
+            <rect x="-26" y="-11" width="52" height="22" rx="10" fill="#8FD98A" stroke="#5FAF5C" stroke-width="4"/>
+            <circle cx="-26" cy="0" r="7" fill="#5FAF5C"/>
+          </g>
+        </g>
+        <ellipse cx="0" cy="10" rx="186" ry="72" fill="#E8398C"/>
+        <ellipse cx="0" cy="-2" rx="186" ry="72" fill="#FF7EB9"/>
+        <path d="M-186 -2 a186 72 0 0 1 186 -72 l0 34 a150 42 0 0 0 -150 38 z" fill="#fff"/>
+        <path d="M186 -2 a186 72 0 0 1 -186 72 l0 -34 a150 42 0 0 0 150 -38 z" fill="#fff"/>
+        <ellipse cx="0" cy="-2" rx="82" ry="30" fill="#8FE3FA"/>
+        <text x="0" y="14" text-anchor="middle" font-size="44" font-weight="bold" fill="#2AA7D8"
+              font-family="Trebuchet MS,Verdana,sans-serif">67</text>
+      </g>
+    </svg>
+
+    <div class="card">
+      <p class="when">SATURDAY, OCTOBER 17</p>
+      <p class="time">3:00 PM</p>
+      <p class="addr">111 Knob Creek, Irvine, CA 92602</p>
+      <p class="bring">Bring your swimsuit, towel &amp; sunscreen! 🏊‍♀️</p>
+      <p class="rsvp">RSVP by Oct 10 to Janie · (360) 975-1517</p>
+      <div class="btns">
+        <a class="btn" href="sms:+13609751517?&body=We're coming to the 6-7 pool party on Oct 17! 🎉">💬 Text RSVP</a>
+        <a class="btn blue" href="tel:+13609751517">📞 Call Janie</a>
+        <button class="btn green" id="cal">📅 Add to calendar</button>
+        <a class="btn purple" href="https://maps.apple.com/?q=111+Knob+Creek,+Irvine,+CA+92602">📍 Map</a>
+      </div>
+    </div>
+
+    <div class="fun">
+      <h2>Fill the pool! Tap the 6 and the 7 🎉</h2>
+      <div class="meter"><div class="fill" id="fill"></div></div>
+      <p class="hint" id="hint">0 taps — every tap makes a splash</p>
+    </div>
+
+    <footer>See you in the pool 💦</footer>
+  </div>
+</div>
+
+<div class="confetti" id="confetti"></div>
+
+<script>
+(function(){
+  // ---- countdown to Oct 17, 3:00 PM (local) ----
+  var party = new Date(new Date().getFullYear(), 9, 17, 15, 0, 0);
+  if (party < new Date()) party = new Date(new Date().getFullYear()+1, 9, 17, 15, 0, 0);
+  var el = {d:document.getElementById('d'),h:document.getElementById('h'),
+            m:document.getElementById('m'),s:document.getElementById('s')};
+  function tick(){
+    var ms = party - new Date();
+    if (ms <= 0){ document.getElementById('count').innerHTML =
+      '<div class="cbox" style="min-width:auto;padding:10px 22px"><div class="cnum">PARTY TIME! 🎉</div></div>'; return; }
+    var t = Math.floor(ms/1000);
+    el.d.textContent = Math.floor(t/86400);
+    el.h.textContent = Math.floor(t%86400/3600);
+    el.m.textContent = Math.floor(t%3600/60);
+    el.s.textContent = t%60;
+    setTimeout(tick, 1000);
+  }
+  tick();
+
+  // ---- confetti ----
+  var host = document.getElementById('confetti');
+  var colors = ['#FF7EB9','#FFD86B','#7ED8A0','#9B8CFF','#6FD8F2','#E8398C'];
+  function burst(x, y, n){
+    for (var i=0;i<n;i++){
+      var p = document.createElement('div');
+      p.className = 'cf';
+      p.style.background = colors[i % colors.length];
+      p.style.left = x+'px'; p.style.top = y+'px';
+      host.appendChild(p);
+      var ang = Math.random()*Math.PI*2, sp = 120 + Math.random()*260;
+      var vx = Math.cos(ang)*sp, vy = Math.sin(ang)*sp - 220, rot = Math.random()*720-360;
+      p.animate([
+        {transform:'translate(0,0) rotate(0deg)', opacity:1},
+        {transform:'translate('+vx+'px,'+(vy+700)+'px) rotate('+rot+'deg)', opacity:0}
+      ], {duration: 1200 + Math.random()*700, easing:'cubic-bezier(.2,.6,.4,1)'})
+       .onfinish = function(){ p.remove(); };
+    }
+  }
+
+  // ---- tap the 6 and the 7 ----
+  var taps = 0, fill = document.getElementById('fill'), hint = document.getElementById('hint');
+  var cheers = ['SIX SEVEN! 🙌','splash! 💦','keep going!','so close!','POOL IS FULL! 🎉🏊‍♀️'];
+  function tap(e){
+    taps++;
+    var r = e.currentTarget.getBoundingClientRect();
+    burst(r.left + r.width/2, r.top + r.height/2, 18);
+    var pct = Math.min(100, taps*100/67);
+    fill.style.width = pct + '%';
+    hint.textContent = taps >= 67 ? '67 taps — POOL IS FULL! 🎉🏊‍♀️'
+      : taps + ' tap' + (taps===1?'':'s') + ' — ' + cheers[Math.min(cheers.length-2, Math.floor(pct/25))];
+    if (taps === 67) burst(window.innerWidth/2, window.innerHeight/3, 90);
+  }
+  document.getElementById('six').addEventListener('click', tap);
+  document.getElementById('sev').addEventListener('click', tap);
+
+  // ---- add to calendar (.ics download) ----
+  function pad(n){ return (n<10?'0':'')+n; }
+  function ics(dt){ return dt.getUTCFullYear()+pad(dt.getUTCMonth()+1)+pad(dt.getUTCDate())+'T'
+                       +pad(dt.getUTCHours())+pad(dt.getUTCMinutes())+'00Z'; }
+  document.getElementById('cal').addEventListener('click', function(){
+    var end = new Date(party.getTime() + 2*3600*1000);
+    var body = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//brain//party//EN','BEGIN:VEVENT',
+      'UID:six-seven-pool-party@brain','DTSTAMP:'+ics(new Date()),
+      'DTSTART:'+ics(party),'DTEND:'+ics(end),
+      'SUMMARY:6 -> 7 Pool Party 🎉',
+      'LOCATION:111 Knob Creek\\, Irvine\\, CA 92602',
+      'DESCRIPTION:Pool party! Bring swimsuit\\, towel & sunscreen. RSVP by Oct 10 to Janie (360) 975-1517',
+      'END:VEVENT','END:VCALENDAR'].join('\r\n');
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([body], {type:'text/calendar'}));
+    a.download = 'six-seven-pool-party.ics';
+    a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+    burst(window.innerWidth/2, window.innerHeight/2, 40);
+  });
+
+  // welcome burst
+  setTimeout(function(){ burst(window.innerWidth/2, 120, 50); }, 400);
+})();
+</script>
+</body>
+</html>
