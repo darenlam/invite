@@ -374,9 +374,8 @@
     burst(r.left + r.width/2, r.top + r.height/2, 14);
     var pct = Math.min(100, taps*100/67);
     fill.style.height = pct + '%';
-    abbywrap.style.bottom = pct + '%';
     document.getElementById('pct').textContent = Math.round(pct) + '% full';
-
+    abbywrap.style.bottom = (5 + pct * 0.52) + '%';   // rides the surface, never clipped by the rim
     var msg = null;
     stages.forEach(function(s){
       if (pct >= s.at && !done[s.at]){
