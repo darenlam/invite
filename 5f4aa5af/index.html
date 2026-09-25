@@ -147,6 +147,35 @@
     border:3px solid #FFD2E6;background:#fff;color:var(--ink)}
   .yesno button.on{background:var(--pink);border-color:var(--pink);color:#fff}
   .sendrow{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+
+  /* sound toggle */
+  .sndbtn{position:fixed;right:12px;top:12px;z-index:60;width:46px;height:46px;border-radius:50%;
+    border:3px solid var(--pink);background:#fff;font-size:20px;cursor:pointer;
+    box-shadow:0 3px 0 rgba(0,0,0,.18)}
+
+  /* the 100% payoff */
+  .abby.cheer{animation:cheer .6s ease-in-out 6}
+  @keyframes cheer{0%,100%{transform:translateY(0) rotate(-6deg) scale(1)}50%{transform:translateY(-26px) rotate(6deg) scale(1.1)}}
+  .finale{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;
+    padding:18px;background:radial-gradient(circle at 50% 35%,rgba(255,126,185,.96),rgba(42,167,216,.96))}
+  .finale.show{display:flex;animation:fadein .35s ease-out}
+  @keyframes fadein{from{opacity:0}to{opacity:1}}
+  .finale .sky{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+  .finale .sky span{position:absolute;top:-60px;animation:fall 3.2s linear infinite}
+  @keyframes fall{from{transform:translateY(-60px) rotate(0)}to{transform:translateY(105vh) rotate(360deg)}}
+  .fbox{position:relative;background:#fff;border:8px solid var(--yellow);border-radius:32px;
+    padding:26px 22px;max-width:420px;width:100%;text-align:center;box-shadow:0 14px 0 rgba(0,0,0,.18);
+    animation:popin .5s cubic-bezier(.2,1.7,.5,1)}
+  @keyframes popin{from{transform:scale(.4) rotate(-8deg);opacity:0}to{transform:scale(1);opacity:1}}
+  .fburst{font-size:54px;line-height:1;animation:spin 2.4s ease-in-out infinite}
+  @keyframes spin{0%,100%{transform:rotate(-14deg) scale(1)}50%{transform:rotate(14deg) scale(1.18)}}
+  .fbox h2{margin:6px 0 4px;font-size:clamp(28px,8vw,44px);color:var(--pink);line-height:1.05;
+    text-shadow:0 3px 0 var(--yellow)}
+  .fsub{margin:6px 0 2px;font-weight:bold;color:var(--blue);font-size:clamp(16px,4.4vw,22px)}
+  .fline{margin:8px 0 16px;font-size:clamp(14px,3.6vw,18px)}
+  .btn.big{font-size:clamp(17px,4.6vw,22px);padding:16px 26px}
+  .fclose{display:block;margin:12px auto 0;background:none;border:none;cursor:pointer;
+    font:inherit;font-size:14px;color:#888;text-decoration:underline}
   .ok{display:none;text-align:center;font-weight:bold;color:#2E7D32;margin:10px 0 0}
 
   footer{text-align:center;color:#fff;opacity:.9;font-size:12px;margin:22px auto 0;width:calc(100% - 28px)}
@@ -297,6 +326,20 @@
   </div>
 </div>
 
+
+<button id="snd" class="sndbtn" type="button" aria-label="Sound on">🔊</button>
+
+<div class="finale" id="finale" role="dialog" aria-label="You filled the pool">
+  <div class="sky"></div>
+  <div class="fbox">
+    <div class="fburst">🎉</div>
+    <h2>POOL PARTY<br>UNLOCKED!</h2>
+    <p class="fsub">You filled Abby's pool! 💦</p>
+    <p class="fline">She turns <b>7</b> on <b>October 17</b> — and she wants you there.</p>
+    <button class="btn big" id="finale-go" type="button">👉 RSVP now</button>
+    <button class="fclose" id="finale-close" type="button">keep splashing</button>
+  </div>
+</div>
 <div class="confetti" id="confetti"></div>
 
 <script>
@@ -375,6 +418,7 @@
     document.body.classList.add('tapped');
     var r = e.currentTarget.getBoundingClientRect();
     burst(r.left + r.width/2, r.top + r.height/2, 14);
+    bloop(taps); if (taps % 4 === 0) splash();
     var pct = Math.min(100, taps*100/NEEDED);
     fill.style.height = pct + '%';
     document.getElementById('pct').textContent = Math.round(pct) + '% full';
@@ -382,7 +426,7 @@
     var msg = null;
     stages.forEach(function(s){
       if (pct >= s.at && !done[s.at]){
-        done[s.at] = true; addProp(s); msg = s.msg;
+        done[s.at] = true; addProp(s); msg = s.msg; ding();
         if (s.at === 92) abby.classList.add('shades');
       }
     });
@@ -390,12 +434,7 @@
     if (taps >= NEEDED){
       document.body.classList.add('full');
       hint.textContent = 'POOL IS FULL — PARTY TIME! 🎉🏊‍♀️ See you Oct 17!';
-      if (!done.win){
-        done.win = true;
-        cue.textContent = '🎉 YOU FILLED THE POOL! NOW RSVP BELOW 👇';
-        burst(window.innerWidth/2, window.innerHeight/3, 110);
-        setTimeout(function(){ burst(window.innerWidth/3, window.innerHeight/2, 70); }, 350);
-      }
+      if (!done.win){ done.win = true; finale(); }
       return;
     }
     hint.textContent = msg ? msg
@@ -403,6 +442,110 @@
   }
   document.getElementById('six').addEventListener('click', tap);
   document.getElementById('sev').addEventListener('click', tap);
+
+  // ---- sound (starts on the first tap, so browsers allow it; 🔊 button mutes) ----
+  var ac = null, muted = false;
+  function audio(){
+    if (muted) return null;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    if (!ac) ac = new AC();
+    if (ac.state === 'suspended') ac.resume();
+    return ac;
+  }
+  function beep(freq, dur, type, vol, delay){
+    var a = audio(); if (!a) return;
+    var o = a.createOscillator(), g = a.createGain(), t = a.currentTime + (delay || 0);
+    o.type = type || 'sine'; o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol || 0.18, t + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + dur + 0.02);
+  }
+  // a splash: short filtered noise burst
+  function splash(){
+    var a = audio(); if (!a) return;
+    var len = Math.floor(a.sampleRate * 0.18), buf = a.createBuffer(1, len, a.sampleRate), d = buf.getChannelData(0);
+    for (var i=0;i<len;i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/len, 2.5);
+    var src = a.createBufferSource(); src.buffer = buf;
+    var bp = a.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1400; bp.Q.value = 0.8;
+    var g = a.createGain(); g.gain.value = 0.35;
+    src.connect(bp); bp.connect(g); g.connect(a.destination); src.start();
+  }
+  function bloop(n){                      // rising water note, higher as the pool fills
+    beep(320 + n * 5, 0.13, 'sine', 0.14);
+  }
+  function ding(){                        // a new thing appeared in the pool
+    beep(880, 0.16, 'triangle', 0.2); beep(1318.5, 0.22, 'triangle', 0.16, 0.09);
+  }
+  var sndBtn = document.getElementById('snd');
+  sndBtn.addEventListener('click', function(){
+    muted = !muted;
+    sndBtn.textContent = muted ? '🔇' : '🔊';
+    sndBtn.setAttribute('aria-label', muted ? 'Sound off' : 'Sound on');
+    if (!muted) beep(660, 0.12, 'triangle', 0.18);
+  });
+  // ---- the payoff: full-screen celebration when the pool hits 100% ----
+  function fanfare(){
+    // rising arpeggio, then a big chord and a splash
+    [523.25, 659.25, 783.99, 1046.5, 1318.5, 1567.98].forEach(function(f, i){
+      beep(f, 0.35, 'triangle', 0.22, i * 0.11);
+    });
+    [523.25, 659.25, 783.99, 1046.5].forEach(function(f){
+      beep(f, 1.1, 'triangle', 0.14, 0.75);
+    });
+    setTimeout(splash, 120); setTimeout(splash, 520); setTimeout(splash, 900);
+  }
+
+  function rain(seconds){
+    var stop = Date.now() + seconds*1000;
+    (function drop(){
+      if (Date.now() > stop) return;
+      burst(Math.random()*window.innerWidth, -20 + Math.random()*80, 8);
+      setTimeout(drop, 120);
+    })();
+  }
+
+  function finale(){
+    cue.textContent = '🎉 YOU FILLED THE POOL! 🎉';
+    abby.classList.add('cheer');
+    fanfare();
+    rain(6);
+    burst(window.innerWidth/2, window.innerHeight/3, 140);
+    setTimeout(function(){ burst(window.innerWidth*0.25, window.innerHeight*0.4, 90); }, 300);
+    setTimeout(function(){ burst(window.innerWidth*0.75, window.innerHeight*0.4, 90); }, 600);
+
+    // pool goes full party mode
+    ['🎉','🎊','🍦','🦩','🐬','🎂','⭐','🍉'].forEach(function(e, i){
+      setTimeout(function(){
+        addProp({emoji:e, cls:'bounceprop',
+                 pos:{left:(6 + i*11) + '%', top:(10 + (i%3)*22) + '%'}});
+      }, 200 + i*160);
+    });
+
+    // the overlay
+    var ov = document.getElementById('finale');
+    ov.classList.add('show');
+    var names = ['🎈','🎉','🎊','💦','🏊‍♀️','🦩','🍦','⭐'];
+    var sky = ov.querySelector('.sky');
+    for (var i=0;i<18;i++){
+      var s = document.createElement('span');
+      s.textContent = names[i % names.length];
+      s.style.left = (Math.random()*92) + '%';
+      s.style.animationDelay = (Math.random()*2.2) + 's';
+      s.style.fontSize = (22 + Math.random()*34) + 'px';
+      sky.appendChild(s);
+    }
+  }
+  document.getElementById('finale-go').addEventListener('click', function(){
+    document.getElementById('finale').classList.remove('show');
+    document.querySelector('.rsvpbox').scrollIntoView({behavior:'smooth', block:'center'});
+    setTimeout(function(){ document.getElementById('who').focus(); }, 600);
+  });
+  document.getElementById('finale-close').addEventListener('click', function(){
+    document.getElementById('finale').classList.remove('show');
+  });
+
 
   // ---- RSVP form ----
   var coming = true;
