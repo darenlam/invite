@@ -118,8 +118,10 @@
   .abby{display:block;width:min(230px,52%);margin:0 auto;animation:bob 3.4s ease-in-out infinite}
   .abby.shades .sunnies{display:block}
   .sunnies{display:none}
-  .pct{position:absolute;left:0;right:0;bottom:6px;text-align:center;font-weight:bold;color:#fff;
-    font-size:clamp(14px,3.6vw,18px);text-shadow:0 2px 4px rgba(0,0,0,.4);z-index:7}
+  .pct{position:absolute;left:12px;bottom:10px;z-index:7;
+    background:#fff;color:var(--pink);font-weight:bold;
+    font-size:clamp(15px,4vw,20px);line-height:1;padding:8px 14px;border-radius:999px;
+    border:3px solid var(--pink);box-shadow:0 3px 0 rgba(0,0,0,.18)}
   .hint{color:var(--pink);font-weight:bold;font-size:clamp(12px,3.2vw,15px);margin:10px 0 0}
   /* things that appear as the pool fills */
   .prop{position:absolute;z-index:5;font-size:clamp(22px,6vw,34px);line-height:1;
@@ -338,6 +340,7 @@
   }
 
   // ---- tap the 6 and the 7: the pool fills and things keep appearing ----
+  var NEEDED = 47;              // 30% fewer taps than the original 67
   var taps = 0, done = {},
       fill = document.getElementById('fill'),
       hint = document.getElementById('hint'),
@@ -348,14 +351,14 @@
 
   // each stage: threshold %, what shows up in the pool, and what the caption says
   var stages = [
-    {at:10, emoji:'🦆', cls:'drift',      pos:{left:'8%',  bottom:'2%'},  msg:'A rubber duck floated in! 🦆'},
+    {at:10, emoji:'🦆', cls:'drift',      pos:{left:'30%', bottom:'4%'},  msg:'A rubber duck floated in! 🦆'},
     {at:22, emoji:'🏐', cls:'bounceprop', pos:{left:'70%', bottom:'34%'}, msg:'Beach ball! 🏐'},
     {at:34, emoji:'🌴', cls:'',           pos:{left:'2%',  top:'16%'},    msg:'Palm tree planted 🌴'},
-    {at:46, emoji:'🐠', cls:'drift',      pos:{left:'18%', bottom:'8%'},  msg:'Wait… a fish? 🐠'},
+    {at:46, emoji:'🐠', cls:'drift',      pos:{left:'38%', bottom:'22%'}, msg:'Wait… a fish? 🐠'},
     {at:58, emoji:'🍕', cls:'bounceprop', pos:{left:'58%', top:'22%'},    msg:'Pizza has arrived 🍕'},
     {at:70, emoji:'🌈', cls:'',           pos:{left:'32%', top:'8%'},     msg:'RAINBOW! 🌈'},
     {at:82, emoji:'🎈', cls:'bounceprop', pos:{left:'82%', top:'30%'},    msg:'Balloons up! 🎈'},
-    {at:92, emoji:'🕶️', cls:'',           pos:{left:'6%',  top:'34%'},    msg:'Abby found her sunglasses 😎'}
+    {at:92, emoji:'🕶️', cls:'',           pos:{left:'8%',  top:'30%'},    msg:'Abby found her sunglasses 😎'}
   ];
   var cheers = ['SIX SEVEN! 🙌','splash! 💦','keep going, it\u2019s filling!','so close!','almost there!'];
 
@@ -372,7 +375,7 @@
     document.body.classList.add('tapped');
     var r = e.currentTarget.getBoundingClientRect();
     burst(r.left + r.width/2, r.top + r.height/2, 14);
-    var pct = Math.min(100, taps*100/67);
+    var pct = Math.min(100, taps*100/NEEDED);
     fill.style.height = pct + '%';
     document.getElementById('pct').textContent = Math.round(pct) + '% full';
     abbywrap.style.bottom = (5 + pct * 0.52) + '%';   // rides the surface, never clipped by the rim
@@ -384,7 +387,7 @@
       }
     });
 
-    if (taps >= 67){
+    if (taps >= NEEDED){
       document.body.classList.add('full');
       hint.textContent = 'POOL IS FULL — PARTY TIME! 🎉🏊‍♀️ See you Oct 17!';
       if (!done.win){
