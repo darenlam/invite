@@ -85,8 +85,28 @@
 
   .fun{margin:22px auto 0;width:calc(100% - 28px);text-align:center}
   .fun h2{color:#fff;font-size:clamp(17px,4.2vw,24px);margin:0 0 10px;text-shadow:0 2px 6px rgba(0,0,0,.2)}
-  .meter{background:rgba(255,255,255,.9);border-radius:999px;height:26px;overflow:hidden;max-width:520px;margin:0 auto;border:3px solid #fff}
-  .fill{height:100%;width:0;background:linear-gradient(90deg,var(--yellow),var(--pink-l),var(--blue-l));transition:width .35s}
+  /* an actual pool: tiled basin, water rises from the bottom, ladder on the rim */
+  .pooltank{position:relative;max-width:520px;margin:0 auto;height:clamp(110px,26vw,150px);
+    background:#EAF7FF;border:7px solid #fff;border-top-width:10px;border-radius:14px 14px 26px 26px;
+    overflow:hidden;box-shadow:inset 0 10px 18px rgba(0,0,0,.12),0 6px 0 rgba(0,0,0,.12)}
+  .tiles{position:absolute;left:0;right:0;top:0;height:14px;
+    background:repeating-linear-gradient(90deg,#4FC4E8 0 18px,#8FE3FA 18px 36px)}
+  .fill{position:absolute;left:0;right:0;bottom:0;height:0;transition:height .4s ease-out;
+    background:linear-gradient(180deg,#6FD8F2,#2AA7D8)}
+  .fill::before,.fill::after{content:"";position:absolute;left:-50%;width:200%;height:16px;top:-12px;
+    background:radial-gradient(circle at 20px -6px,transparent 14px,#6FD8F2 14px) repeat-x;
+    background-size:40px 20px;animation:wave 3s linear infinite}
+  .fill::after{opacity:.55;animation-duration:4.6s;animation-direction:reverse;top:-8px}
+  @keyframes wave{from{transform:translateX(0)}to{transform:translateX(-40px)}}
+  .ladder{position:absolute;right:16px;top:-2px;width:38px;height:62px;z-index:2}
+  .ladder i{position:absolute;top:0;width:6px;height:100%;background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+  .ladder i:first-child{left:0}.ladder i:nth-child(2){right:0}
+  .ladder b{position:absolute;left:0;right:0;height:5px;background:#fff;border-radius:3px}
+  .floatie{position:absolute;left:14%;bottom:0;width:clamp(34px,9vw,46px);height:clamp(34px,9vw,46px);
+    border:clamp(9px,2.4vw,12px) solid #FF7EB9;border-radius:50%;background:#8FE3FA;
+    transition:bottom .4s ease-out;z-index:3;transform:translateY(50%)}
+  .pct{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-weight:bold;color:#fff;
+    font-size:clamp(15px,4vw,20px);text-shadow:0 2px 4px rgba(0,0,0,.35);z-index:4}
   .hint{color:#fff;font-size:13px;margin:8px 0 0;opacity:.95}
 
   footer{text-align:center;color:#fff;opacity:.9;font-size:12px;margin:22px auto 0;width:calc(100% - 28px)}
@@ -186,7 +206,13 @@
 
     <div class="fun">
       <h2>Fill the pool! Tap the 6 and the 7 🎉</h2>
-      <div class="meter"><div class="fill" id="fill"></div></div>
+      <div class="pooltank">
+        <div class="tiles"></div>
+        <div class="fill" id="fill"></div>
+        <div class="floatie" id="floatie"></div>
+        <div class="ladder"><i></i><i></i><b style="top:14px"></b><b style="top:32px"></b><b style="top:50px"></b></div>
+        <div class="pct" id="pct">0% full</div>
+      </div>
       <p class="hint" id="hint">0 taps — every tap makes a splash</p>
     </div>
 
@@ -238,13 +264,16 @@
 
   // ---- tap the 6 and the 7 ----
   var taps = 0, fill = document.getElementById('fill'), hint = document.getElementById('hint');
+  var floatie = document.getElementById('floatie');
   var cheers = ['SIX SEVEN! 🙌','splash! 💦','keep going!','so close!','POOL IS FULL! 🎉🏊‍♀️'];
   function tap(e){
     taps++;
     var r = e.currentTarget.getBoundingClientRect();
     burst(r.left + r.width/2, r.top + r.height/2, 18);
     var pct = Math.min(100, taps*100/67);
-    fill.style.width = pct + '%';
+    fill.style.height = pct + '%';
+    floatie.style.bottom = pct + '%';
+    document.getElementById('pct').textContent = Math.round(pct) + '% full';
     hint.textContent = taps >= 67 ? '67 taps — POOL IS FULL! 🎉🏊‍♀️'
       : taps + ' tap' + (taps===1?'':'s') + ' — ' + cheers[Math.min(cheers.length-2, Math.floor(pct/25))];
     if (taps === 67) burst(window.innerWidth/2, window.innerHeight/3, 90);
