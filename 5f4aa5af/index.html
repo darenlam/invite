@@ -83,13 +83,24 @@
   .btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
   .btn.blue{background:var(--blue)} .btn.green{background:#3FA76B} .btn.purple{background:#7A69E6}
 
-  .fun{margin:22px auto 0;width:calc(100% - 28px);text-align:center}
-  .fun h2{color:#fff;font-size:clamp(17px,4.2vw,24px);margin:0 0 10px;text-shadow:0 2px 6px rgba(0,0,0,.2)}
+  .fun{margin:18px auto 6px;width:calc(100% - 28px);text-align:center}
+  .tapcue{text-align:center;font-weight:bold;color:#fff;background:var(--pink);
+    display:block;width:max-content;max-width:calc(100% - 28px);margin:2px auto 12px;
+    padding:10px 18px;border-radius:999px;font-size:clamp(13px,3.4vw,19px);
+    box-shadow:0 4px 0 rgba(0,0,0,.15);animation:cue 1.1s ease-in-out infinite}
+  .tapcue b{color:var(--yellow)}
+  @keyframes cue{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-7px) scale(1.04)}}
+  .num{animation:wiggle 1.6s ease-in-out infinite}
+  .num.sev{animation-delay:.8s}
+  @keyframes wiggle{0%,100%{transform:rotate(-3deg) scale(1)}50%{transform:rotate(3deg) scale(1.07)}}
+  .tapped .num{animation:none}
+  .tapped .tapcue{animation:none}
+
   /* an actual pool: tiled basin, water rises from the bottom, ladder on the rim */
-  .pooltank{position:relative;max-width:520px;margin:0 auto;height:clamp(110px,26vw,150px);
+  .pooltank{position:relative;max-width:520px;margin:0 auto;height:clamp(200px,48vw,270px);
     background:#EAF7FF;border:7px solid #fff;border-top-width:10px;border-radius:14px 14px 26px 26px;
     overflow:hidden;box-shadow:inset 0 10px 18px rgba(0,0,0,.12),0 6px 0 rgba(0,0,0,.12)}
-  .tiles{position:absolute;left:0;right:0;top:0;height:14px;
+  .tiles{position:absolute;left:0;right:0;top:0;height:14px;z-index:5;
     background:repeating-linear-gradient(90deg,#4FC4E8 0 18px,#8FE3FA 18px 36px)}
   .fill{position:absolute;left:0;right:0;bottom:0;height:0;transition:height .4s ease-out;
     background:linear-gradient(180deg,#6FD8F2,#2AA7D8)}
@@ -98,16 +109,44 @@
     background-size:40px 20px;animation:wave 3s linear infinite}
   .fill::after{opacity:.55;animation-duration:4.6s;animation-direction:reverse;top:-8px}
   @keyframes wave{from{transform:translateX(0)}to{transform:translateX(-40px)}}
-  .ladder{position:absolute;right:16px;top:-2px;width:38px;height:62px;z-index:2}
+  .ladder{position:absolute;right:16px;top:-2px;width:38px;height:62px;z-index:6}
   .ladder i{position:absolute;top:0;width:6px;height:100%;background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.25)}
   .ladder i:first-child{left:0}.ladder i:nth-child(2){right:0}
   .ladder b{position:absolute;left:0;right:0;height:5px;background:#fff;border-radius:3px}
-  .floatie{position:absolute;left:14%;bottom:0;width:clamp(34px,9vw,46px);height:clamp(34px,9vw,46px);
-    border:clamp(9px,2.4vw,12px) solid #FF7EB9;border-radius:50%;background:#8FE3FA;
-    transition:bottom .4s ease-out;z-index:3;transform:translateY(50%)}
-  .pct{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-weight:bold;color:#fff;
-    font-size:clamp(15px,4vw,20px);text-shadow:0 2px 4px rgba(0,0,0,.35);z-index:4}
-  .hint{color:#fff;font-size:13px;margin:8px 0 0;opacity:.95}
+  /* Abby rides the waterline */
+  .abbywrap{position:absolute;left:0;right:0;bottom:0;z-index:4;transform:translateY(40%);
+    transition:bottom .45s ease-out}
+  .abby{display:block;width:min(230px,52%);margin:0 auto;animation:bob 3.4s ease-in-out infinite}
+  .abby.shades .sunnies{display:block}
+  .sunnies{display:none}
+  .pct{position:absolute;left:0;right:0;bottom:6px;text-align:center;font-weight:bold;color:#fff;
+    font-size:clamp(14px,3.6vw,18px);text-shadow:0 2px 4px rgba(0,0,0,.4);z-index:7}
+  .hint{color:var(--pink);font-weight:bold;font-size:clamp(12px,3.2vw,15px);margin:10px 0 0}
+  /* things that appear as the pool fills */
+  .prop{position:absolute;z-index:5;font-size:clamp(22px,6vw,34px);line-height:1;
+    animation:pop .5s cubic-bezier(.2,1.6,.5,1)}
+  @keyframes pop{from{transform:scale(0) rotate(-40deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+  .drift{animation:pop .5s cubic-bezier(.2,1.6,.5,1), drift 7s ease-in-out infinite alternate}
+  @keyframes drift{from{margin-left:0}to{margin-left:38%}}
+  .bounceprop{animation:pop .5s cubic-bezier(.2,1.6,.5,1), bouncey 1.6s ease-in-out infinite}
+  @keyframes bouncey{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+  .full .pooltank{box-shadow:inset 0 10px 18px rgba(0,0,0,.12),0 0 0 6px var(--yellow),0 6px 0 rgba(0,0,0,.12)}
+
+  /* RSVP form */
+  .rsvpbox{margin-top:16px;border-top:3px dashed #FFD2E6;padding-top:14px;text-align:left}
+  .rsvpbox h3{margin:0 0 10px;text-align:center;color:var(--pink);font-size:clamp(17px,4.4vw,24px)}
+  .field{margin:0 0 10px}
+  .field label{display:block;font-size:13px;font-weight:bold;color:var(--ink);margin:0 0 4px}
+  .field input,.field textarea,.field select{width:100%;font:inherit;padding:11px 12px;
+    border:3px solid #FFD2E6;border-radius:14px;background:#fff;color:var(--ink)}
+  .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--pink-l)}
+  .row{display:flex;gap:10px}.row .field{flex:1}
+  .yesno{display:flex;gap:10px;margin:0 0 12px}
+  .yesno button{flex:1;font:inherit;font-weight:bold;cursor:pointer;padding:12px;border-radius:14px;
+    border:3px solid #FFD2E6;background:#fff;color:var(--ink)}
+  .yesno button.on{background:var(--pink);border-color:var(--pink);color:#fff}
+  .sendrow{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+  .ok{display:none;text-align:center;font-weight:bold;color:#2E7D32;margin:10px 0 0}
 
   footer{text-align:center;color:#fff;opacity:.9;font-size:12px;margin:22px auto 0;width:calc(100% - 28px)}
   .confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
@@ -139,6 +178,60 @@
   <p class="tag">SIX SEVEN POOL PARTY!</p>
   <p class="sub">Come do the 6–7 with me in the pool 🙌</p>
 
+  <p class="tapcue">👆 TAP THE <b>6</b> AND THE <b>7</b> TO FILL ABBY'S POOL! 👆</p>
+
+  <div class="fun">
+    <div class="pooltank" id="tank">
+      <div class="tiles"></div>
+      <div class="fill" id="fill"></div>
+      <!-- Abby floating in her 67 ring -->
+      <div class="abbywrap" id="abbywrap">
+      <svg class="abby" id="abby" viewBox="0 0 520 470" role="img" aria-label="Cartoon of Abby in a 67 swim ring">
+        <g transform="translate(260,300)">
+          <g stroke="#F7D3B4" stroke-width="34" stroke-linecap="round" fill="none">
+            <path d="M-58 -60 L-150 -180"/><path d="M58 -60 L150 -180"/>
+          </g>
+          <circle cx="-158" cy="-196" r="27" fill="#F7D3B4"/>
+          <circle cx="158" cy="-196" r="27" fill="#F7D3B4"/>
+          <ellipse cx="0" cy="-70" rx="78" ry="80" fill="#FF7EB9"/>
+          <g transform="translate(0,-168)">
+            <path d="M-104 -6 q-6 -116 104 -116 q110 0 104 116 q4 82 -18 96 q-10 -70 -20 -96 l-132 0 q-12 28 -20 96 q-22 -14 -18 -96 z" fill="#241a16"/>
+            <ellipse cx="-96" cy="52" rx="24" ry="52" fill="#241a16"/>
+            <ellipse cx="96" cy="52" rx="24" ry="52" fill="#241a16"/>
+            <ellipse cx="0" cy="8" rx="88" ry="92" fill="#F7D3B4"/>
+            <path d="M-92 -8 q4 -96 92 -96 q92 0 94 92 q-28 -54 -86 -44 q-42 8 -54 40 q-14 22 -46 8 z" fill="#241a16"/>
+            <path d="M-58 14 q22 -28 44 0" stroke="#241a16" stroke-width="10" fill="none" stroke-linecap="round"/>
+            <path d="M14 14 q22 -28 44 0" stroke="#241a16" stroke-width="10" fill="none" stroke-linecap="round"/>
+            <ellipse cx="-66" cy="48" rx="18" ry="11" fill="#FF9FCB" opacity=".7"/>
+            <ellipse cx="66" cy="48" rx="18" ry="11" fill="#FF9FCB" opacity=".7"/>
+            <g class="sunnies">
+              <rect x="-88" y="-8" width="72" height="42" rx="16" fill="#241a16"/>
+              <rect x="16" y="-8" width="72" height="42" rx="16" fill="#241a16"/>
+              <rect x="-18" y="6" width="36" height="9" rx="4" fill="#241a16"/>
+            </g>
+            <path d="M-46 50 q46 60 92 0 q-46 16 -92 0 z" fill="#B0443F"/>
+            <path d="M-42 51 q42 12 84 0 l-6 14 q-36 10 -72 0 z" fill="#fff"/>
+            <g transform="translate(-74,-58) rotate(-18)">
+              <rect x="-26" y="-11" width="52" height="22" rx="10" fill="#8FD98A" stroke="#5FAF5C" stroke-width="4"/>
+              <circle cx="-26" cy="0" r="7" fill="#5FAF5C"/>
+            </g>
+          </g>
+          <ellipse cx="0" cy="10" rx="186" ry="72" fill="#E8398C"/>
+          <ellipse cx="0" cy="-2" rx="186" ry="72" fill="#FF7EB9"/>
+          <path d="M-186 -2 a186 72 0 0 1 186 -72 l0 34 a150 42 0 0 0 -150 38 z" fill="#fff"/>
+          <path d="M186 -2 a186 72 0 0 1 -186 72 l0 -34 a150 42 0 0 0 150 -38 z" fill="#fff"/>
+          <ellipse cx="0" cy="-2" rx="82" ry="30" fill="#8FE3FA"/>
+          <text x="0" y="14" text-anchor="middle" font-size="44" font-weight="bold" fill="#2AA7D8"
+                font-family="Trebuchet MS,Verdana,sans-serif">67</text>
+        </g>
+      </svg>
+      </div>
+      <div class="ladder"><i></i><i></i><b style="top:14px"></b><b style="top:32px"></b><b style="top:50px"></b></div>
+      <div class="pct" id="pct">0% full</div>
+    </div>
+    <p class="hint" id="hint">0 taps — every tap makes a splash 💦</p>
+  </div>
+
   <div class="count" id="count">
     <div class="cbox"><div class="cnum" id="d">–</div><div class="clab">days</div></div>
     <div class="cbox"><div class="cnum" id="h">–</div><div class="clab">hours</div></div>
@@ -154,42 +247,6 @@
   </div>
 
   <div class="water">
-    <!-- cartoon birthday girl in a 67 swim ring -->
-    <svg class="swimmer" viewBox="0 0 520 470" role="img" aria-label="Cartoon of the birthday girl in a 67 swim ring">
-      <g transform="translate(260,300)">
-        <g stroke="#F7D3B4" stroke-width="34" stroke-linecap="round" fill="none">
-          <path d="M-58 -60 L-150 -180"/><path d="M58 -60 L150 -180"/>
-        </g>
-        <circle cx="-158" cy="-196" r="27" fill="#F7D3B4"/>
-        <circle cx="158" cy="-196" r="27" fill="#F7D3B4"/>
-        <ellipse cx="0" cy="-70" rx="78" ry="80" fill="#FF7EB9"/>
-        <g transform="translate(0,-168)">
-          <path d="M-104 -6 q-6 -116 104 -116 q110 0 104 116 q4 82 -18 96 q-10 -70 -20 -96 l-132 0 q-12 28 -20 96 q-22 -14 -18 -96 z" fill="#241a16"/>
-          <ellipse cx="-96" cy="52" rx="24" ry="52" fill="#241a16"/>
-          <ellipse cx="96" cy="52" rx="24" ry="52" fill="#241a16"/>
-          <ellipse cx="0" cy="8" rx="88" ry="92" fill="#F7D3B4"/>
-          <path d="M-92 -8 q4 -96 92 -96 q92 0 94 92 q-28 -54 -86 -44 q-42 8 -54 40 q-14 22 -46 8 z" fill="#241a16"/>
-          <path d="M-58 14 q22 -28 44 0" stroke="#241a16" stroke-width="10" fill="none" stroke-linecap="round"/>
-          <path d="M14 14 q22 -28 44 0" stroke="#241a16" stroke-width="10" fill="none" stroke-linecap="round"/>
-          <ellipse cx="-66" cy="48" rx="18" ry="11" fill="#FF9FCB" opacity=".7"/>
-          <ellipse cx="66" cy="48" rx="18" ry="11" fill="#FF9FCB" opacity=".7"/>
-          <path d="M-46 50 q46 60 92 0 q-46 16 -92 0 z" fill="#B0443F"/>
-          <path d="M-42 51 q42 12 84 0 l-6 14 q-36 10 -72 0 z" fill="#fff"/>
-          <g transform="translate(-74,-58) rotate(-18)">
-            <rect x="-26" y="-11" width="52" height="22" rx="10" fill="#8FD98A" stroke="#5FAF5C" stroke-width="4"/>
-            <circle cx="-26" cy="0" r="7" fill="#5FAF5C"/>
-          </g>
-        </g>
-        <ellipse cx="0" cy="10" rx="186" ry="72" fill="#E8398C"/>
-        <ellipse cx="0" cy="-2" rx="186" ry="72" fill="#FF7EB9"/>
-        <path d="M-186 -2 a186 72 0 0 1 186 -72 l0 34 a150 42 0 0 0 -150 38 z" fill="#fff"/>
-        <path d="M186 -2 a186 72 0 0 1 -186 72 l0 -34 a150 42 0 0 0 150 -38 z" fill="#fff"/>
-        <ellipse cx="0" cy="-2" rx="82" ry="30" fill="#8FE3FA"/>
-        <text x="0" y="14" text-anchor="middle" font-size="44" font-weight="bold" fill="#2AA7D8"
-              font-family="Trebuchet MS,Verdana,sans-serif">67</text>
-      </g>
-    </svg>
-
     <div class="card">
       <p class="when">SATURDAY, OCTOBER 17</p>
       <p class="time">3:00 PM</p>
@@ -197,23 +254,42 @@
       <p class="bring">Bring your swimsuit, towel &amp; sunscreen! 🏊‍♀️</p>
       <p class="rsvp">RSVP by Oct 10 to Janie · (360) 975-1517</p>
       <div class="btns">
-        <a class="btn" href="sms:+13609751517?&body=We're coming to the 6-7 pool party on Oct 17! 🎉">💬 Text RSVP</a>
-        <a class="btn blue" href="tel:+13609751517">📞 Call Janie</a>
+        <a class="btn" href="tel:+13609751517">📞 Call Janie</a>
         <button class="btn green" id="cal">📅 Add to calendar</button>
         <a class="btn purple" href="https://maps.apple.com/?q=111+Knob+Creek,+Irvine,+CA+92602">📍 Map</a>
       </div>
-    </div>
 
-    <div class="fun">
-      <h2>Fill the pool! Tap the 6 and the 7 🎉</h2>
-      <div class="pooltank">
-        <div class="tiles"></div>
-        <div class="fill" id="fill"></div>
-        <div class="floatie" id="floatie"></div>
-        <div class="ladder"><i></i><i></i><b style="top:14px"></b><b style="top:32px"></b><b style="top:50px"></b></div>
-        <div class="pct" id="pct">0% full</div>
+      <div class="rsvpbox">
+        <h3>RSVP right here 🎉</h3>
+        <div class="yesno">
+          <button type="button" id="yes" class="on">🎉 We're coming!</button>
+          <button type="button" id="no">😢 Can't make it</button>
+        </div>
+        <div class="field">
+          <label for="who">Child's name</label>
+          <input id="who" type="text" placeholder="e.g. Mia Chen" autocomplete="name">
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="kids">Kids</label>
+            <input id="kids" type="number" min="0" max="20" value="1" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label for="adults">Adults</label>
+            <input id="adults" type="number" min="0" max="20" value="1" inputmode="numeric">
+          </div>
+        </div>
+        <div class="field">
+          <label for="note">Anything we should know? (allergies, swim level)</label>
+          <textarea id="note" rows="2" placeholder="Optional"></textarea>
+        </div>
+        <div class="sendrow">
+          <button class="btn" id="sendsms" type="button">💬 Send RSVP by text</button>
+          <button class="btn blue" id="sendmail" type="button">✉️ Send by email</button>
+          <button class="btn purple" id="copy" type="button">📋 Copy</button>
+        </div>
+        <p class="ok" id="ok">Thanks! Your RSVP is ready to send — hit send in the app that just opened.</p>
       </div>
-      <p class="hint" id="hint">0 taps — every tap makes a splash</p>
     </div>
 
     <footer>See you in the pool 💦</footer>
@@ -262,24 +338,111 @@
     }
   }
 
-  // ---- tap the 6 and the 7 ----
-  var taps = 0, fill = document.getElementById('fill'), hint = document.getElementById('hint');
-  var floatie = document.getElementById('floatie');
-  var cheers = ['SIX SEVEN! 🙌','splash! 💦','keep going!','so close!','POOL IS FULL! 🎉🏊‍♀️'];
+  // ---- tap the 6 and the 7: the pool fills and things keep appearing ----
+  var taps = 0, done = {},
+      fill = document.getElementById('fill'),
+      hint = document.getElementById('hint'),
+      tank = document.getElementById('tank'),
+      abbywrap = document.getElementById('abbywrap'),
+      abby = document.getElementById('abby'),
+      cue = document.querySelector('.tapcue');
+
+  // each stage: threshold %, what shows up in the pool, and what the caption says
+  var stages = [
+    {at:10, emoji:'🦆', cls:'drift',      pos:{left:'8%',  bottom:'2%'},  msg:'A rubber duck floated in! 🦆'},
+    {at:22, emoji:'🏐', cls:'bounceprop', pos:{left:'70%', bottom:'34%'}, msg:'Beach ball! 🏐'},
+    {at:34, emoji:'🌴', cls:'',           pos:{left:'2%',  top:'16%'},    msg:'Palm tree planted 🌴'},
+    {at:46, emoji:'🐠', cls:'drift',      pos:{left:'18%', bottom:'8%'},  msg:'Wait… a fish? 🐠'},
+    {at:58, emoji:'🍕', cls:'bounceprop', pos:{left:'58%', top:'22%'},    msg:'Pizza has arrived 🍕'},
+    {at:70, emoji:'🌈', cls:'',           pos:{left:'32%', top:'8%'},     msg:'RAINBOW! 🌈'},
+    {at:82, emoji:'🎈', cls:'bounceprop', pos:{left:'82%', top:'30%'},    msg:'Balloons up! 🎈'},
+    {at:92, emoji:'🕶️', cls:'',           pos:{left:'6%',  top:'34%'},    msg:'Abby found her sunglasses 😎'}
+  ];
+  var cheers = ['SIX SEVEN! 🙌','splash! 💦','keep going, it\u2019s filling!','so close!','almost there!'];
+
+  function addProp(s){
+    var d = document.createElement('div');
+    d.className = 'prop ' + s.cls;
+    d.textContent = s.emoji;
+    for (var k in s.pos) d.style[k] = s.pos[k];
+    document.getElementById('tank').appendChild(d);
+  }
+
   function tap(e){
     taps++;
+    document.body.classList.add('tapped');
     var r = e.currentTarget.getBoundingClientRect();
-    burst(r.left + r.width/2, r.top + r.height/2, 18);
+    burst(r.left + r.width/2, r.top + r.height/2, 14);
     var pct = Math.min(100, taps*100/67);
     fill.style.height = pct + '%';
-    floatie.style.bottom = pct + '%';
+    abbywrap.style.bottom = pct + '%';
     document.getElementById('pct').textContent = Math.round(pct) + '% full';
-    hint.textContent = taps >= 67 ? '67 taps — POOL IS FULL! 🎉🏊‍♀️'
-      : taps + ' tap' + (taps===1?'':'s') + ' — ' + cheers[Math.min(cheers.length-2, Math.floor(pct/25))];
-    if (taps === 67) burst(window.innerWidth/2, window.innerHeight/3, 90);
+
+    var msg = null;
+    stages.forEach(function(s){
+      if (pct >= s.at && !done[s.at]){
+        done[s.at] = true; addProp(s); msg = s.msg;
+        if (s.at === 92) abby.classList.add('shades');
+      }
+    });
+
+    if (taps >= 67){
+      document.body.classList.add('full');
+      hint.textContent = 'POOL IS FULL — PARTY TIME! 🎉🏊‍♀️ See you Oct 17!';
+      if (!done.win){
+        done.win = true;
+        cue.textContent = '🎉 YOU FILLED THE POOL! NOW RSVP BELOW 👇';
+        burst(window.innerWidth/2, window.innerHeight/3, 110);
+        setTimeout(function(){ burst(window.innerWidth/3, window.innerHeight/2, 70); }, 350);
+      }
+      return;
+    }
+    hint.textContent = msg ? msg
+      : taps + ' tap' + (taps===1?'':'s') + ' — ' + cheers[Math.min(cheers.length-1, Math.floor(pct/22))];
   }
   document.getElementById('six').addEventListener('click', tap);
   document.getElementById('sev').addEventListener('click', tap);
+
+  // ---- RSVP form ----
+  var coming = true;
+  var yes = document.getElementById('yes'), no = document.getElementById('no');
+  yes.addEventListener('click', function(){ coming = true; yes.classList.add('on'); no.classList.remove('on'); });
+  no.addEventListener('click', function(){ coming = false; no.classList.add('on'); yes.classList.remove('on'); });
+
+  function val(id){ return (document.getElementById(id).value || '').trim(); }
+  function rsvpText(){
+    var who = val('who') || 'We';
+    if (!coming) return who + " can't make Abby's 6-7 pool party on Oct 17 — sorry! " + (val('note') || '');
+    var kids = val('kids') || '0', adults = val('adults') || '0';
+    var t = who + " is coming to Abby's 6-7 pool party on Oct 17 at 3pm! "
+          + kids + ' kid' + (kids === '1' ? '' : 's') + ' + '
+          + adults + ' adult' + (adults === '1' ? '' : 's') + '.';
+    if (val('note')) t += ' Note: ' + val('note');
+    return t;
+  }
+  function flash(text){
+    var ok = document.getElementById('ok');
+    ok.textContent = text; ok.style.display = 'block';
+    burst(window.innerWidth/2, window.innerHeight/2, 50);
+  }
+  document.getElementById('sendsms').addEventListener('click', function(){
+    if (!val('who')) { flash('Please add your child\u2019s name first 🙂'); return; }
+    location.href = 'sms:+13609751517' + (/iPhone|iPad|Mac/.test(navigator.userAgent) ? '&' : '?')
+                  + 'body=' + encodeURIComponent(rsvpText());
+    flash('Text ready — hit send in Messages ✅');
+  });
+  document.getElementById('sendmail').addEventListener('click', function(){
+    if (!val('who')) { flash('Please add your child\u2019s name first 🙂'); return; }
+    location.href = 'mailto:jfciputra@gmail.com?subject='
+      + encodeURIComponent("RSVP — Abby's 6-7 pool party")
+      + '&body=' + encodeURIComponent(rsvpText());
+    flash('Email ready — hit send ✅');
+  });
+  document.getElementById('copy').addEventListener('click', function(){
+    var t = rsvpText();
+    if (navigator.clipboard) navigator.clipboard.writeText(t);
+    flash('Copied! Paste it to Janie: (360) 975-1517');
+  });
 
   // ---- add to calendar (.ics download) ----
   function pad(n){ return (n<10?'0':'')+n; }
