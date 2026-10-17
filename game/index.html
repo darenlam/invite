@@ -31,6 +31,20 @@
   .egg{position:absolute;font-size:clamp(34px,10vw,52px);line-height:1;cursor:pointer;
     filter:drop-shadow(0 3px 4px rgba(0,0,0,.25));transition:transform .12s}
   .egg:active{transform:scale(.85)}
+  .chip.round{background:var(--pink);color:#fff;border-color:#fff}
+  .chip.round b{color:var(--yellow)}
+  .lvlnote{margin:2px 14px 6px;text-align:center;font-weight:bold;color:var(--ink);
+    font-size:clamp(12px,3.2vw,15px);opacity:.85}
+  .egg.bomb{filter:drop-shadow(0 0 10px #ff2d2d) drop-shadow(0 3px 4px rgba(0,0,0,.35));
+    animation:fuse .55s ease-in-out infinite}
+  @keyframes fuse{0%,100%{transform:scale(1)}50%{transform:scale(1.14) rotate(6deg)}}
+  #stage.hit{animation:shake .4s}
+  #stage.hit::after{content:"";position:absolute;inset:0;background:rgba(255,0,0,.38);
+    pointer-events:none;animation:flash .4s}
+  @keyframes flash{from{opacity:1}to{opacity:0}}
+  @keyframes shake{0%,100%{transform:translateX(0)}
+    15%{transform:translateX(-12px)}30%{transform:translateX(11px)}
+    45%{transform:translateX(-8px)}60%{transform:translateX(7px)}80%{transform:translateX(-4px)}}
   .pop{position:absolute;pointer-events:none;font-weight:bold;color:#fff;font-size:20px;
     text-shadow:0 2px 4px rgba(0,0,0,.4)}
 
@@ -60,12 +74,16 @@
 <body>
 
 <h1>🤫 Abby's Secret Pool Game</h1>
-<p class="sub">You found the hidden game on your goodie bag!<br>Catch <b>15 floaties</b> before the pool drains.</p>
+<p class="sub">You found the hidden game on your goodie bag!<br>Catch the floaties — but <b>never tap a 💣 bomb</b>.</p>
+
+<p class="lvlnote" id="lvlnote">&nbsp;</p>
 
 <div class="hud">
-  <div class="chip">Caught <b id="score">0</b>/15</div>
-  <div class="chip">Time <b id="time">30</b>s</div>
-  <div class="chip">Best <b id="best">0</b></div>
+  <div class="chip round">Round <b id="round">1</b></div>
+  <div class="chip">Caught <b id="score">0</b>/<b id="goal">12</b></div>
+  <div class="chip">Time <b id="time">32</b>s</div>
+  <div class="chip">Lives <b id="lives">❤️❤️❤️❤️</b></div>
+  <div class="chip">Best round <b id="best">0</b></div>
 </div>
 
 <div id="stage"><div class="tiles"></div></div>
@@ -83,6 +101,7 @@
     <div class="code" id="code">SPLASH67</div>
     <p class="tiny">Show this secret word to Abby for a high five 🙌</p>
     <button class="btn" id="again" type="button">🔁 Play again</button>
+    <button class="btn blue" id="retry" type="button" style="display:none">↩️ Back to Round 1</button>
   </div>
 </div>
 
@@ -92,7 +111,12 @@
 (function(){
   var stage = document.getElementById('stage'),
       scoreEl = document.getElementById('score'),
+      roundEl = document.getElementById('round'),
+      againBtn = document.getElementById('again'),
+      retryBtn = document.getElementById('retry'),
       timeEl = document.getElementById('time'),
+      goalEl = document.getElementById('goal'),
+      livesEl = document.getElementById('lives'),
       bestEl = document.getElementById('best'),
       go = document.getElementById('go'),
       over = document.getElementById('over'),
@@ -100,13 +124,30 @@
 
   document.getElementById('invite').href = '../5f4aa5af/';
 
-  var GOAL = 15, LEN = 30;
+  // ---- rounds: every win makes the next one harder, forever ----
+  var ROUND_NAMES = ['Paddling', 'Splashing', 'Swimming', 'Diving', 'Cannonball',
+                     'Shark Week', 'Tidal Wave', 'Whirlpool', 'Tsunami', 'LEGENDARY'];
+  function levelFor(r){                       // r = 1, 2, 3, …
+    return {
+      round: r,
+      name:  ROUND_NAMES[Math.min(r - 1, ROUND_NAMES.length - 1)] + (r > ROUND_NAMES.length ? ' +' + (r - ROUND_NAMES.length) : ''),
+      goal:  8 + r * 4,                                  // 12, 16, 20, …
+      len:   Math.max(16, 32 - (r - 1) * 2),             // 32s down to 16s
+      lives: Math.max(1, 4 - Math.floor((r - 1) / 2)),   // 4,4,3,3,2,2,1…
+      gap:   Math.max(300, 700 - (r - 1) * 55),          // spawns get faster
+      bomb:  Math.min(0.45, 0.10 + (r - 1) * 0.05),      // more bombs
+      ramp:  0.008 + (r - 1) * 0.003
+    };
+  }
+  var round = 1, L = levelFor(1);
+
   var icons = ['🦆','🏐','🐠','🍉','🍦','🌈','⭐','🐬','🦩','🍕'];
   var colors = ['#FF7EB9','#FFD86B','#7ED8A0','#9B8CFF','#6FD8F2','#E8398C'];
-  var score = 0, left = LEN, running = false, timer = null, spawner = null;
+  var score = 0, left = 0, lives = 0, running = false, timer = null, spawner = null;
+  var wonCode = false;                        // has the secret word been earned this visit
 
-  var best = 0;
-  try { best = parseInt(localStorage.getItem('abbyGameBest') || '0', 10) || 0; } catch(e){}
+  var best = 0;                               // best = furthest round reached
+  try { best = parseInt(localStorage.getItem('abbyGameBestRound') || '0', 10) || 0; } catch(e){}
   bestEl.textContent = best;
 
   // --- sound ---
@@ -150,12 +191,28 @@
               {duration:650,easing:'ease-out'}).onfinish = function(){ d.remove(); };
   }
 
+  function boom(x, y){
+    // bomb tapped: lose a life, shake the pool, red flash
+    lives--;
+    livesEl.textContent = '❤️'.repeat(Math.max(0, lives)) || '—';
+    floatUp(x, y, '💥 -1');
+    stage.classList.add('hit');
+    setTimeout(function(){ stage.classList.remove('hit'); }, 420);
+    // explosion sound: low noise thump + falling tone
+    beep(90, 0.35, 'sawtooth', 0.3);
+    beep(220, 0.22, 'square', 0.18);
+    if (navigator.vibrate) { try { navigator.vibrate(160); } catch(e){} }
+    if (lives <= 0) finish(false, true);
+  }
+
   function spawn(){
     if (!running) return;
-    var e = document.createElement('div');
-    e.className = 'egg';
-    e.textContent = icons[Math.floor(Math.random()*icons.length)];
     var w = stage.clientWidth, h = stage.clientHeight;
+    // bombs get more common the better you are doing: 18% -> 38%
+    var isBomb = Math.random() < Math.min(0.55, L.bomb + score * L.ramp);
+    var e = document.createElement('div');
+    e.className = 'egg' + (isBomb ? ' bomb' : '');
+    e.textContent = isBomb ? '💣' : icons[Math.floor(Math.random()*icons.length)];
     e.style.left = (20 + Math.random()*(w-90)) + 'px';
     e.style.top  = (26 + Math.random()*(h-90)) + 'px';
     stage.appendChild(e);
@@ -163,18 +220,20 @@
                           {opacity:1,transform:'scale(1)',offset:.18},
                           {opacity:1,transform:'scale(1)',offset:.8},
                           {opacity:0,transform:'scale(.4)'}],
-                         {duration: 1500 - Math.min(700, score*45)});
+                         {duration: (isBomb ? 1300 : 1500) - Math.min(L.gap, score*45)});
     life.onfinish = function(){ e.remove(); };
     e.addEventListener('click', function(ev){
       if (!running || e.dataset.got) return;
       e.dataset.got = '1';
+      var x = parseFloat(e.style.left), y = parseFloat(e.style.top);
+      var r = stage.getBoundingClientRect();
+      e.remove();
+      if (isBomb){ boom(x, y); return; }
       score++; scoreEl.textContent = score;
       beep(520 + score*28, 0.12, 'sine', 0.2);
-      var r = stage.getBoundingClientRect();
-      floatUp(parseFloat(e.style.left), parseFloat(e.style.top), '+1');
-      burst(r.left + parseFloat(e.style.left) + 18, r.top + parseFloat(e.style.top) + 18, 10);
-      e.remove();
-      if (score >= GOAL) finish(true);
+      floatUp(x, y, '+1');
+      burst(r.left + x + 18, r.top + y + 18, 10);
+      if (score >= L.goal) finish(true);
     });
   }
 
@@ -182,11 +241,24 @@
     Array.prototype.slice.call(stage.querySelectorAll('.egg,.pop')).forEach(function(n){ n.remove(); });
   }
 
+  function showRound(){
+    L = levelFor(round);
+    roundEl.textContent = round;
+    goalEl.textContent = L.goal;
+    timeEl.textContent = L.len;
+    livesEl.textContent = '❤️'.repeat(L.lives);
+    document.getElementById('lvlnote').textContent =
+      'Round ' + round + ': ' + L.name + ' · ' + L.goal + ' floaties · ' + L.len + 's · '
+      + L.lives + ' live' + (L.lives === 1 ? '' : 's');
+  }
+
   function start(){
     clearStage();
     over.classList.remove('show');
-    score = 0; left = LEN; running = true;
-    scoreEl.textContent = '0'; timeEl.textContent = LEN;
+    L = levelFor(round);
+    score = 0; left = L.len; lives = L.lives; running = true;
+    showRound();
+    scoreEl.textContent = '0';
     go.textContent = '⏸ Playing…';
     beep(660, 0.12, 'triangle', 0.2);
     timer = setInterval(function(){
@@ -194,26 +266,51 @@
       if (left <= 5 && left > 0) beep(300, 0.08, 'square', 0.12);
       if (left <= 0) finish(false);
     }, 1000);
-    spawner = setInterval(spawn, 620);
+    spawner = setInterval(spawn, L.gap);
     spawn();
   }
 
-  function finish(won){
+  function finish(won, blownUp){
     running = false;
     clearInterval(timer); clearInterval(spawner);
     clearStage();
-    go.textContent = '▶️ Start';
-    if (score > best){
-      best = score; bestEl.textContent = best;
-      try { localStorage.setItem('abbyGameBest', String(best)); } catch(e){}
+
+    var reached = won ? round : round - 1;     // rounds actually cleared
+    if (reached > best){
+      best = reached; bestEl.textContent = best;
+      try { localStorage.setItem('abbyGameBestRound', String(best)); } catch(e){}
     }
-    document.getElementById('bigicon').textContent = won ? '🏆' : '💦';
-    document.getElementById('title').textContent   = won ? 'YOU WIN!' : 'Time\u2019s up!';
-    document.getElementById('msg').textContent = won
-      ? 'You caught all ' + GOAL + ' floaties!'
-      : 'You caught ' + score + '. Try again — you need ' + GOAL + '.';
-    document.getElementById('code').style.display = won ? 'inline-block' : 'none';
-    document.querySelector('.tiny').style.display = won ? 'block' : 'none';
+
+    var next = won ? levelFor(round + 1) : null;
+    document.getElementById('bigicon').textContent = won ? '🏆' : (blownUp ? '💥' : '💦');
+    document.getElementById('title').textContent = won
+      ? 'ROUND ' + round + ' CLEARED!'
+      : (blownUp ? 'BOOM!' : 'Time\u2019s up!');
+
+    if (won){
+      wonCode = true;
+      document.getElementById('msg').textContent =
+        'You caught all ' + L.goal + ' floaties. Next up: Round ' + (round + 1) + ' — '
+        + next.name + '. ' + next.goal + ' floaties in ' + next.len + 's with only '
+        + next.lives + ' live' + (next.lives === 1 ? '' : 's') + '. Harder every time!';
+      againBtn.textContent = '➡️ Round ' + (round + 1);
+      retryBtn.style.display = 'none';
+    } else {
+      document.getElementById('msg').textContent = blownUp
+        ? 'You tapped one bomb too many on Round ' + round + '. You had ' + score + '/' + L.goal + '.'
+        : 'You caught ' + score + ' of ' + L.goal + ' on Round ' + round + '.';
+      againBtn.textContent = '🔁 Try Round ' + round + ' again';
+      retryBtn.style.display = best > 0 ? 'inline-block' : 'none';
+      retryBtn.textContent = '↩️ Back to Round 1';
+    }
+
+    // the secret word is earned once and then stays visible
+    document.getElementById('code').style.display = wonCode ? 'inline-block' : 'none';
+    document.querySelector('.tiny').textContent = won && round === 1
+      ? 'Show this secret word to Abby for a high five 🙌'
+      : 'Your secret word — keep playing to beat your record!';
+    document.querySelector('.tiny').style.display = wonCode ? 'block' : 'none';
+
     over.classList.add('show');
     if (won){
       [523.25,659.25,783.99,1046.5].forEach(function(f,i){
@@ -221,13 +318,19 @@
       });
       burst(window.innerWidth/2, window.innerHeight/3, 120);
       setTimeout(function(){ burst(window.innerWidth/3, window.innerHeight/2, 70); }, 320);
+      round++;                                  // next game is one notch harder
+    } else if (blownUp){
+      beep(70, 0.6, 'sawtooth', 0.3);
     } else {
       beep(200, 0.4, 'sawtooth', 0.14);
     }
+    showRound();
   }
 
+  showRound();
   go.addEventListener('click', function(){ if (!running) start(); });
-  document.getElementById('again').addEventListener('click', start);
+  againBtn.addEventListener('click', start);
+  retryBtn.addEventListener('click', function(){ round = 1; showRound(); start(); });
 
   // no pinch / double-tap zoom
   ['gesturestart','gesturechange','gestureend'].forEach(function(ev){
