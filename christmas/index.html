@@ -24,7 +24,7 @@
   html, body { margin: 0; padding: 0; }
   body {
     font-family: "Trebuchet MS", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(180deg, #931427 0%, #C41E3A 220px, #FFF9F0 220px, #F7F2E7 100%) no-repeat;
+    background: #F7F3EB;
     color: var(--ink);
     overflow-x: hidden;
     min-height: 100vh;
@@ -72,10 +72,17 @@
     100% { opacity: 1; transform: scale(1.08); }
   }
 
-  /* Header */
+  /* Header Banner */
+  .hero-header {
+    background: linear-gradient(180deg, #7A0C1B 0%, #A31627 45%, #C41E3A 100%);
+    padding: 10px 16px 26px;
+    border-radius: 0 0 28px 28px;
+    box-shadow: 0 10px 24px rgba(122,12,27,0.22);
+    margin-bottom: 22px;
+  }
   .hero {
     text-align: center;
-    padding: 12px 10px 18px;
+    padding: 8px 10px 0;
     color: #FFF;
   }
   .badge {
@@ -93,21 +100,22 @@
     margin-bottom: 8px;
   }
   h1 {
-    font-size: clamp(34px, 8.5vw, 56px);
+    font-size: clamp(32px, 8vw, 54px);
     margin: 4px 0 8px;
-    line-height: 1.05;
-    text-shadow: 0 3px 0 rgba(0,0,0,0.15), 0 8px 20px rgba(0,0,0,0.25);
+    line-height: 1.1;
+    text-shadow: 0 3px 0 rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.3);
     letter-spacing: -0.5px;
   }
   h1 span.taco { color: var(--gold); }
+  h1 span.taco-block { white-space: nowrap; }
   .subtitle {
     font-size: clamp(16px, 4.2vw, 22px);
-    font-weight: 600;
-    margin: 0;
-    opacity: 0.95;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    font-weight: 700;
+    margin: 8px 0 0;
+    color: #FFFDF9;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+    letter-spacing: 0.3px;
   }
-
   /* Tap Toy Section */
   .toy-section {
     background: #FFF;
@@ -658,20 +666,25 @@
 <button id="snd" class="sndbtn" type="button" aria-label="Sound on">🔊</button>
 <div id="toast" class="toast">RSVP saved! 🎉</div>
 
-<div class="wrap">
-  <!-- String Lights -->
-  <div class="lights-row" aria-hidden="true">
-    <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
-    <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
-    <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
-  </div>
+<header class="hero-header">
+  <div class="wrap">
+    <!-- String Lights -->
+    <div class="lights-row" aria-hidden="true">
+      <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
+      <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
+      <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
+    </div>
 
-  <!-- Hero Banner -->
-  <div class="hero">
-    <div class="badge">🎄 Yorba Linda SDA Church 🎄</div>
-    <h1>Taco 'Bout <span class="taco">Christmas!</span> 🌮</h1>
-    <p class="subtitle">Annual Church Christmas Party &amp; Taco Truck</p>
+    <!-- Hero Banner -->
+    <div class="hero">
+      <div class="badge">🎄 Yorba Linda SDA Church 🎄</div>
+      <h1>Taco 'Bout <span class="taco-block"><span class="taco">Christmas!</span> 🌮</span></h1>
+      <p class="subtitle">Annual Church Christmas Party &amp; Taco Truck</p>
+    </div>
   </div>
+</header>
+
+<div class="wrap">
 
   <!-- Interactive Platter Tap Toy -->
   <div class="toy-section">
