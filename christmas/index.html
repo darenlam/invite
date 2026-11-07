@@ -778,14 +778,9 @@
   <div class="card" id="signup-card">
     <div class="card-title">✍️ RSVP &amp; Sign Up</div>
     <div style="background:#FFF9E6; border:1px solid #FFE082; border-radius:12px; padding:12px 14px; margin-bottom:16px; font-size:14px; line-height:1.4;">
-      Sign ups are connected directly to our church Google Sheet. Tap below to fill out the sign up form, and your family will appear on the guest list below!
+      Fill this out and your family will appear on the guest list below. Our organizers get an email right away.
     </div>
-    <div class="btn-row" style="margin-bottom:16px;">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfJ3yc1-C4WyBeSc_OMlCuhr0CYhn9K4_EA0fLPuutzNpWmfA/viewform" target="_blank" class="btn" style="display:inline-block; text-decoration:none; font-size:17px; padding:15px 28px; background:var(--red); color:#FFF; font-weight:bold; border-radius:14px; box-shadow:0 4px 14px rgba(196,30,58,0.35);">
-        🌮 Click Here to RSVP &amp; Sign Up
-      </a>
-    </div>
-    <form id="rsvp-form" style="display:none;">
+    <form id="rsvp-form">
       <div class="field">
         <label for="name">Family / Full Name <span class="req">*</span></label>
         <input type="text" id="name" required placeholder="e.g. Mike &amp; Sunhee Lee" autocomplete="name">
@@ -854,7 +849,22 @@
           <option value="Cash at door">Cash at door</option>
         </select>
       </div>
-
+      <div class="field" style="background:#FFF9E6; border:1px solid #FFE082; border-radius:12px; padding:12px 14px;">
+        <label style="display:flex; align-items:center; gap:10px; cursor:pointer; margin:0;">
+          <input type="checkbox" id="prize-yes" style="width:20px; height:20px; flex:none;">
+          <span>🎁 I would like to donate a prize to the raffle</span>
+        </label>
+        <div id="prize-fields" style="display:none; grid-template-columns:2fr 1fr; gap:10px; margin-top:12px;">
+          <div>
+            <label for="prize-item">What are you donating? <span class="req">*</span></label>
+            <input type="text" id="prize-item" placeholder="e.g. Gift basket">
+          </div>
+          <div>
+            <label for="prize-value">Value</label>
+            <input type="text" id="prize-value" placeholder="e.g. $40">
+          </div>
+        </div>
+      </div>
 
       <div class="btn-row">
         <button type="submit" class="btn" style="font-size:17px; padding:15px 24px;">🌮 Submit RSVP</button>
@@ -928,33 +938,12 @@
       <button class="btn outline" style="padding:4px 10px; font-size:12px; flex:none;" onclick="toggleAdmin()">Close</button>
     </div>
     <p style="font-size:13px; color:var(--muted); margin:0 0 14px;">
-      This private view shows full phone numbers, emails, and payment tracking for Daren, Isaac, and Laura.
+      Full contact details, payments and raffle prizes are kept private in the church sign-up sheet. Every new sign-up is also emailed to Daren and Isaac.
     </p>
-
-    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px;">
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
       <a class="btn green" style="padding:8px 14px; font-size:13px;" href="https://docs.google.com/spreadsheets/d/131NnDHX_XAA_OzVLIC7kxLE1EZw96JPWuW0aCCt17Wo/edit" target="_blank">
-        📊 Open Google Sheet
+        📊 Open Sign-up Sheet
       </a>
-      <button class="btn outline" style="padding:8px 14px; font-size:13px;" onclick="copyFullRoster()">
-        📋 Copy Contact List
-      </button>
-    </div>
-
-    <div style="overflow-x:auto;">
-      <table class="roster-table" style="font-size:13px;">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Contact</th>
-            <th>Guests</th>
-            <th>Due</th>
-            <th>Method</th>
-            <th>Paid?</th>
-          </tr>
-        </thead>
-        <tbody id="admin-body">
-        </tbody>
-      </table>
     </div>
   </div>
 
@@ -1103,88 +1092,28 @@
   }
   recalc();
 
-  // ---- Google Sheet CSV Data Fetching ----
-  var SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/131NnDHX_XAA_OzVLIC7kxLE1EZw96JPWuW0aCCt17Wo/export?format=csv&gid=1929320596";
+  // ---- Sign-up service (saves to the church Google Sheet and emails Daren + Isaac) ----
+  var SIGNUP_URL = "https://script.google.com/macros/s/AKfycbzy6C4yEXGIevYrXEGDj3bw-nY17ME8IYExy5JLzJc00wLQI8zHTPD3RYmJTz575FTBsg/exec";
   var attendees = [];
 
+  // The roster endpoint returns names and counts only. Phone, email and payment never reach this page.
   function loadAttendees() {
-    // 1. Load from local cache first
-    var local = JSON.parse(localStorage.getItem('ylsda_rsvps') || '[]');
-    attendees = local;
-    renderRosters();
-
-    // 2. Fetch live sheet CSV from Google Form responses
-    fetch(SHEET_CSV_URL)
-      .then(function(r) { return r.text(); })
-      .then(function(csv) {
-        var rows = parseCSV(csv);
-        if (rows.length > 1) {
-          var header = rows[0].map(function(h) { return (h || '').toLowerCase(); });
-          var nameIdx = header.findIndex(function(h) { return h.includes('name'); });
-          var emailIdx = header.findIndex(function(h) { return h.includes('email') || h.includes('address'); });
-          var phoneIdx = header.findIndex(function(h) { return h.includes('phone'); });
-          var adultsIdx = header.findIndex(function(h) { return h.includes('adult'); });
-          var kidsOverIdx = header.findIndex(function(h) { return h.includes('> 4') || h.includes('over 4'); });
-          var kidsUnderIdx = header.findIndex(function(h) { return h.includes('under') || h.includes('free'); });
-          var methodIdx = header.findIndex(function(h) { return h.includes('payment') || h.includes('method'); });
-
-          if (nameIdx === -1) nameIdx = 2; // fallback
-
-          var sheetAttendees = [];
-          for (var i = 1; i < rows.length; i++) {
-            var row = rows[i];
-            var name = (nameIdx >= 0 && row[nameIdx]) ? row[nameIdx].trim() : '';
-            if (!name) continue;
-            var adults = adultsIdx >= 0 ? parseInt(row[adultsIdx], 10) || 0 : 0;
-            var kidsOver = kidsOverIdx >= 0 ? parseInt(row[kidsOverIdx], 10) || 0 : 0;
-            var kidsUnder = kidsUnderIdx >= 0 ? parseInt(row[kidsUnderIdx], 10) || 0 : 0;
-            var totalDue = (adults + kidsOver) * 10;
-
-            sheetAttendees.push({
-              time: row[0] || '',
-              name: name,
-              email: emailIdx >= 0 ? row[emailIdx] || '' : '',
-              phone: phoneIdx >= 0 ? row[phoneIdx] || '' : '',
-              adults: adults,
-              kidsOver: kidsOver,
-              kidsUnder: kidsUnder,
-              totalDue: totalDue,
-              method: methodIdx >= 0 ? row[methodIdx] || 'Venmo' : 'Venmo',
-              paid: false,
-              notes: ''
-            });
-          }
-          if (sheetAttendees.length > 0) {
-            attendees = sheetAttendees;
-            renderRosters();
-          }
-        }
+    fetch(SIGNUP_URL)
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        attendees = res.attendees || [];
+        renderRosters();
       })
       .catch(function(err) {
-        console.log("Sheet read fallback:", err);
+        console.log("Roster load failed:", err);
+        renderRosters();
       });
   }
 
-  function parseCSV(text) {
-    var lines = text.split(/\r\n|\n/);
-    return lines.map(function(line) {
-      var cells = [], inQ = false, curr = '';
-      for (var i = 0; i < line.length; i++) {
-        var c = line[i];
-        if (c === '"') { inQ = !inQ; }
-        else if (c === ',' && !inQ) { cells.push(curr.trim()); curr = ''; }
-        else { curr += c; }
-      }
-      cells.push(curr.trim());
-      return cells;
-    });
-  }
 
   function renderRosters() {
     var tbody = document.getElementById('roster-body');
-    var adminBody = document.getElementById('admin-body');
     tbody.innerHTML = '';
-    if (adminBody) adminBody.innerHTML = '';
 
     if (attendees.length === 0) {
       tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--muted); padding:18px;">Be the first family to sign up! 🌮</td></tr>';
@@ -1210,18 +1139,6 @@
         + '<td style="text-align:right;"><strong>' + party + '</strong></td>';
       tbody.appendChild(tr);
 
-      // Private Admin table row
-      if (adminBody) {
-        var atr = document.createElement('tr');
-        atr.innerHTML = '<td><strong>' + escapeHTML(att.name) + '</strong>' + (att.notes ? '<div style="font-size:11px; color:#B23B15;">' + escapeHTML(att.notes) + '</div>' : '') + '</td>'
-          + '<td><a href="tel:' + encodeURIComponent(att.phone) + '">' + escapeHTML(att.phone) + '</a><br>'
-          + '<a href="mailto:' + encodeURIComponent(att.email) + '" style="color:var(--muted); font-size:11px;">' + escapeHTML(att.email) + '</a></td>'
-          + '<td>' + att.adults + 'A, ' + (att.kidsOver || 0) + 'K(&gt;4), ' + (att.kidsUnder || 0) + 'K(&le;4)</td>'
-          + '<td><strong>$' + (att.totalDue || 0) + '</strong></td>'
-          + '<td>' + escapeHTML(att.method || 'Venmo') + '</td>'
-          + '<td><input type="checkbox" ' + (att.paid ? 'checked' : '') + ' onchange="togglePaid(' + idx + ', this.checked)"></td>';
-        adminBody.appendChild(atr);
-      }
     });
 
     updateStats(totalFamilies, totalAdults, totalKids, totalGuests);
@@ -1243,53 +1160,61 @@
 
   // ---- Form Submission ----
   var form = document.getElementById('rsvp-form');
+  var prizeBox = document.getElementById('prize-yes');
+  prizeBox.addEventListener('change', function() {
+    document.getElementById('prize-fields').style.display = prizeBox.checked ? 'grid' : 'none';
+    document.getElementById('prize-item').required = prizeBox.checked;
+  });
+
   form.addEventListener('submit', function(e) {
     e.preventDefault();
+    var btn = form.querySelector('button[type="submit"]');
     var name = document.getElementById('name').value.trim();
     var phone = document.getElementById('phone').value.trim();
     var email = document.getElementById('email').value.trim();
     var method = document.getElementById('pay-method').value;
-    var notes = '';
-    var paying = counts.adults + counts['kids-over'];
-    var totalDue = paying * 10;
-
-    var newEntry = {
-      time: new Date().toLocaleString(),
-      name: name,
-      phone: phone,
-      email: email,
-      adults: counts.adults,
-      kidsOver: counts['kids-over'],
-      kidsUnder: counts['kids-under'],
-      totalDue: totalDue,
-      method: method,
-      paid: false,
-      notes: notes
-    };
-
-    // Save to local cache
-    var local = JSON.parse(localStorage.getItem('ylsda_rsvps') || '[]');
-    local.push(newEntry);
-    localStorage.setItem('ylsda_rsvps', JSON.stringify(local));
-
-    attendees.push(newEntry);
-    renderRosters();
-    fireConfetti();
-    showToast('🎉 RSVP Received! See you on Dec 12!');
-
-    // Show clean confirmation
-    var succ = document.getElementById('rsvp-success');
-    var detail = document.getElementById('success-detail');
+    var donating = prizeBox.checked;
+    var prize = donating ? document.getElementById('prize-item').value.trim() : '';
+    var prizeValue = donating ? document.getElementById('prize-value').value.trim() : '';
+    var totalDue = (counts.adults + counts['kids-over']) * 10;
     var totalGuests = counts.adults + counts['kids-over'] + counts['kids-under'];
 
-    detail.textContent = name + ' (' + totalGuests + ' guests) · $' + totalDue + ' via ' + method;
-    succ.style.display = 'block';
-    succ.scrollIntoView({ behavior: 'smooth' });
+    var payload = {
+      name: name, phone: phone, email: email,
+      adults: counts.adults, kidsOver: counts['kids-over'], kidsUnder: counts['kids-under'],
+      method: method, prize: prize, prizeValue: prizeValue
+    };
 
-    // Reset input fields
-    document.getElementById('name').value = '';
-    document.getElementById('phone').value = '';
-    document.getElementById('email').value = '';
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    // text/plain keeps this a "simple" request, so the browser skips the CORS preflight.
+    fetch(SIGNUP_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (res.result !== 'success') throw new Error(res.error || 'failed');
+        attendees.push({ name: name, adults: payload.adults, kidsOver: payload.kidsOver, kidsUnder: payload.kidsUnder });
+        renderRosters();
+        fireConfetti();
+        showToast('🎉 RSVP Received! See you on Dec 12!');
+
+        var succ = document.getElementById('rsvp-success');
+        var detail = document.getElementById('success-detail');
+        detail.textContent = name + ' (' + totalGuests + ' guests) · $' + totalDue + ' via ' + method
+          + (prize ? ' · Raffle prize: ' + prize : '');
+        succ.style.display = 'block';
+        succ.scrollIntoView({ behavior: 'smooth' });
+
+        ['name', 'phone', 'email', 'prize-item', 'prize-value'].forEach(function(id) { document.getElementById(id).value = ''; });
+        prizeBox.checked = false;
+        prizeBox.dispatchEvent(new Event('change'));
+      })
+      .catch(function() {
+        showToast('Sorry, that did not go through. Please try again.');
+      })
+      .then(function() {
+        btn.disabled = false;
+        btn.textContent = '🌮 Submit RSVP';
+      });
   });
   // ---- Organizer Dashboard Toggle ----
   window.toggleAdmin = function() {
@@ -1305,22 +1230,6 @@
     } else if (code !== null) {
       alert("Incorrect passcode.");
     }
-  };
-
-  window.togglePaid = function(idx, checked) {
-    if (attendees[idx]) {
-      attendees[idx].paid = checked;
-      localStorage.setItem('ylsda_rsvps', JSON.stringify(attendees));
-      showToast(checked ? 'Marked as Paid ✅' : 'Marked as Unpaid');
-    }
-  };
-
-  window.copyFullRoster = function() {
-    var lines = ["Name\tPhone\tEmail\tAdults\tKids>4\tKids<=4\tDue\tMethod\tPaid\tNotes"];
-    attendees.forEach(function(a) {
-      lines.push([a.name, a.phone, a.email, a.adults, a.kidsOver, a.kidsUnder, '$' + a.totalDue, a.method, a.paid ? 'PAID' : 'UNPAID', a.notes].join('\t'));
-    });
-    copyText(lines.join('\n'), 'Full roster copied to clipboard!');
   };
 
   // ---- Copy Helpers ----
