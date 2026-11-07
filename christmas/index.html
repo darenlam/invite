@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Taco 'Bout Christmas · Yorba Linda SDA Church Party</title>
+<meta name="theme-color" content="#C41E3A">
+<style>
+  :root {
+    --red: #C41E3A;
+    --red-dark: #931427;
+    --green: #2D6A4F;
+    --green-dark: #1B4332;
+    --green-light: #52B788;
+    --gold: #FFD166;
+    --orange: #E76F51;
+    --cream: #FFFDF9;
+    --card-bg: #FFFFFF;
+    --ink: #262626;
+    --muted: #666666;
+    --border: #E8E0D5;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Trebuchet MS", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(180deg, #931427 0%, #C41E3A 220px, #FFF9F0 220px, #F7F2E7 100%) no-repeat;
+    color: var(--ink);
+    overflow-x: hidden;
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    position: relative;
+    padding: 0 16px;
+  }
+
+  /* Christmas String Lights */
+  .lights-row {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 4px 6px;
+    position: relative;
+    z-index: 10;
+  }
+  .light {
+    width: 14px;
+    height: 18px;
+    border-radius: 50% 50% 45% 45%;
+    display: inline-block;
+    position: relative;
+    animation: flash 1.6s infinite alternate;
+  }
+  .light::before {
+    content: "";
+    position: absolute;
+    top: -4px;
+    left: 4px;
+    width: 6px;
+    height: 4px;
+    background: #333;
+    border-radius: 2px;
+  }
+  .light:nth-child(4n+1) { background: #FF3B30; box-shadow: 0 0 10px #FF3B30; animation-delay: 0s; }
+  .light:nth-child(4n+2) { background: #34C759; box-shadow: 0 0 10px #34C759; animation-delay: 0.4s; }
+  .light:nth-child(4n+3) { background: #FFD60A; box-shadow: 0 0 10px #FFD60A; animation-delay: 0.8s; }
+  .light:nth-child(4n+4) { background: #007AFF; box-shadow: 0 0 10px #007AFF; animation-delay: 1.2s; }
+  @keyframes flash {
+    0% { opacity: 0.45; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1.08); }
+  }
+
+  /* Header */
+  .hero {
+    text-align: center;
+    padding: 12px 10px 18px;
+    color: #FFF;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #FFF;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-size: clamp(34px, 8.5vw, 56px);
+    margin: 4px 0 8px;
+    line-height: 1.05;
+    text-shadow: 0 3px 0 rgba(0,0,0,0.15), 0 8px 20px rgba(0,0,0,0.25);
+    letter-spacing: -0.5px;
+  }
+  h1 span.taco { color: var(--gold); }
+  .subtitle {
+    font-size: clamp(16px, 4.2vw, 22px);
+    font-weight: 600;
+    margin: 0;
+    opacity: 0.95;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  /* Tap Toy Section */
+  .toy-section {
+    background: #FFF;
+    border: 4px solid var(--gold);
+    border-radius: 26px;
+    padding: 20px 16px;
+    margin: 8px auto 20px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+  .tap-cue {
+    display: inline-block;
+    background: var(--red);
+    color: #FFF;
+    font-weight: bold;
+    font-size: clamp(14px, 3.6vw, 17px);
+    padding: 9px 18px;
+    border-radius: 999px;
+    box-shadow: 0 4px 10px rgba(196,30,58,0.3);
+    animation: bounce-cue 1.2s infinite ease-in-out;
+    cursor: pointer;
+    user-select: none;
+  }
+  .tap-cue b { color: var(--gold); }
+  @keyframes bounce-cue {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  /* Platter Tank */
+  .platter-tank {
+    position: relative;
+    width: min(380px, 88vw);
+    height: 180px;
+    margin: 16px auto 10px;
+    background: radial-gradient(circle at 50% 60%, #FFFDF5 0%, #F5ECD7 100%);
+    border: 8px solid #E2A153;
+    border-radius: 50% / 40%;
+    box-shadow: inset 0 8px 18px rgba(0,0,0,0.12), 0 10px 0 rgba(0,0,0,0.06);
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .platter-decor {
+    position: absolute;
+    inset: 6px;
+    border: 2px dashed rgba(226,161,83,0.4);
+    border-radius: 50% / 40%;
+    pointer-events: none;
+  }
+  .platter-fill {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 0%;
+    background: linear-gradient(180deg, rgba(231,111,81,0.25) 0%, rgba(255,209,102,0.4) 100%);
+    transition: height 0.35s ease-out;
+    pointer-events: none;
+  }
+  .platter-pct {
+    position: absolute;
+    left: 14px;
+    bottom: 12px;
+    background: #FFF;
+    color: var(--red);
+    font-weight: bold;
+    font-size: 15px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 2px solid var(--red);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    z-index: 5;
+  }
+  .item-drop {
+    position: absolute;
+    font-size: 32px;
+    line-height: 1;
+    animation: drop-in 0.45s cubic-bezier(0.18, 1.25, 0.4, 1);
+    user-select: none;
+    pointer-events: none;
+  }
+  @keyframes drop-in {
+    from { transform: translateY(-70px) scale(0.3) rotate(-30deg); opacity: 0; }
+    to { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+  }
+  .toy-hint {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 6px 0 0;
+  }
+
+  /* Countdown */
+  .countdown {
+    display: flex;
+    justify-content: center;
+    gap: clamp(8px, 2.5vw, 14px);
+    margin: 18px 0 24px;
+  }
+  .cbox {
+    background: #FFF;
+    border: 3px solid var(--green);
+    border-radius: 16px;
+    padding: 8px 12px;
+    min-width: clamp(64px, 18vw, 84px);
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  }
+  .cnum {
+    font-size: clamp(24px, 6.5vw, 36px);
+    font-weight: bold;
+    color: var(--red);
+    line-height: 1.1;
+  }
+  .clab {
+    font-size: 11px;
+    color: var(--green-dark);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  /* Main Card */
+  .card {
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    border-radius: 24px;
+    padding: 24px 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+  }
+  .card-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--green-dark);
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  @media(min-width: 600px) {
+    .info-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .info-item {
+    background: #FAF7F2;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border-left: 5px solid var(--red);
+  }
+  .info-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .info-val {
+    font-size: 17px;
+    font-weight: bold;
+    color: var(--ink);
+    margin-top: 4px;
+  }
+  .info-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* Price highlight box */
+  .price-box {
+    background: linear-gradient(135deg, #FFF5EB 0%, #FFE9D6 100%);
+    border: 2px solid #F4A261;
+    border-radius: 18px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  .price-title {
+    font-weight: bold;
+    color: #B23B15;
+    font-size: 15px;
+    margin: 0 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    padding: 4px 0;
+    border-bottom: 1px dashed rgba(244,162,97,0.4);
+  }
+  .price-row:last-child { border-bottom: none; }
+  .price-row b { color: var(--green-dark); }
+
+  /* Action Buttons */
+  .btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .btn {
+    appearance: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    font: inherit;
+    font-weight: bold;
+    font-size: 15px;
+    color: #FFF;
+    background: var(--red);
+    padding: 12px 18px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    transition: transform 0.12s, box-shadow 0.12s;
+    flex: 1 1 180px;
+  }
+  .btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .btn.green { background: var(--green); }
+  .btn.gold { background: #D9822B; }
+  .btn.outline {
+    background: #FFF;
+    color: var(--ink);
+    border: 2px solid var(--border);
+    box-shadow: none;
+  }
+
+  /* Payment Section */
+  .pay-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  @media(min-width: 580px) {
+    .pay-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .pay-card {
+    background: #FAF7F2;
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 16px;
+    position: relative;
+  }
+  .pay-badge {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #FFF;
+    background: var(--green);
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+  .pay-val {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--ink);
+    word-break: break-all;
+  }
+  .copy-chip {
+    display: inline-block;
+    background: #FFF;
+    border: 1px solid #CCC;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  .copy-chip:hover { background: #F0F0F0; }
+
+  /* Form Section */
+  .field {
+    margin-bottom: 16px;
+  }
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  label span.req { color: var(--red); }
+  label span.sub { font-weight: normal; color: var(--muted); font-size: 12px; }
+  input[type="text"], input[type="email"], input[type="tel"], textarea, select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font: inherit;
+    font-size: 15px;
+    background: #FFF;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--green);
+  }
+  .num-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  .stepper-box {
+    background: #FAF7F2;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 10px;
+    text-align: center;
+  }
+  .stepper-box label {
+    font-size: 12px;
+    margin-bottom: 4px;
+    font-weight: bold;
+  }
+  .stepper-box .fee {
+    font-size: 11px;
+    color: var(--red);
+    font-weight: 700;
+  }
+  .stepper-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .step-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--green);
+    background: #FFF;
+    color: var(--green);
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+  }
+  .step-val {
+    font-size: 18px;
+    font-weight: bold;
+    min-width: 24px;
+    text-align: center;
+  }
+
+  /* Live Calculation Banner */
+  .calc-banner {
+    background: #E8F5E9;
+    border: 2px solid var(--green);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 18px 0;
+  }
+  .calc-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--green-dark);
+  }
+  .calc-sub {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .calc-amount {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--green-dark);
+  }
+
+  /* Attendee Table */
+  .stats-bar {
+    display: flex;
+    justify-content: space-around;
+    background: #FAF7F2;
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 10px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--red);
+  }
+  .stat-lbl {
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+  .roster-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .roster-table th {
+    background: #FAF7F2;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: bold;
+    color: var(--muted);
+    border-bottom: 2px solid var(--border);
+  }
+  .roster-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .roster-table tr:last-child td {
+    border-bottom: none;
+  }
+  .roster-badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .roster-badge.adult { background: #E1EFE6; color: #1B4332; }
+  .roster-badge.kid { background: #FFF1D6; color: #B25E00; }
+
+  /* Sound & Organizer Floating Buttons */
+  .sndbtn {
+    position: fixed;
+    right: 14px;
+    top: 14px;
+    z-index: 60;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid #FFF;
+    background: var(--red);
+    color: #FFF;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+
+  /* Admin Modal */
+  .admin-panel {
+    display: none;
+    margin-top: 20px;
+    background: #FFFDF9;
+    border: 3px solid var(--green);
+    border-radius: 20px;
+    padding: 20px 16px;
+  }
+  .admin-panel.open { display: block; }
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  /* Toast Notification */
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #1B4332;
+    color: #FFF;
+    font-weight: bold;
+    padding: 12px 24px;
+    border-radius: 999px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    z-index: 100;
+    transition: transform 0.3s cubic-bezier(0.18, 1.25, 0.4, 1);
+    font-size: 14px;
+    pointer-events: none;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Confetti canvas */
+  #confetti-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 99;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+<button id="snd" class="sndbtn" type="button" aria-label="Sound on">🔊</button>
+<div id="toast" class="toast">RSVP saved! 🎉</div>
+
+<div class="wrap">
+  <!-- String Lights -->
+  <div class="lights-row" aria-hidden="true">
+    <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
+    <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
+    <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
+  </div>
+
+  <!-- Hero Banner -->
+  <div class="hero">
+    <div class="badge">🎄 Yorba Linda SDA Church 🎄</div>
+    <h1>Taco 'Bout <span class="taco">Christmas!</span> 🌮</h1>
+    <p class="subtitle">Annual Church Christmas Party &amp; Taco Truck</p>
+  </div>
+
+  <!-- Interactive Platter Tap Toy -->
+  <div class="toy-section">
+    <div class="tap-cue" id="tap-cue">👆 <b>TAP TO LOAD</b> THE TACO PLATTER! 🌮</div>
+    <div class="platter-tank" id="platter">
+      <div class="platter-decor"></div>
+      <div class="platter-fill" id="fill"></div>
+      <div class="platter-pct" id="pct">0% Full</div>
+    </div>
+    <p class="toy-hint" id="toy-hint">Tap anywhere on the platter to drop tacos, limes &amp; holiday sombreros!</p>
+  </div>
+
+  <!-- Countdown Clock -->
+  <div class="countdown" id="countdown">
+    <div class="cbox"><div class="cnum" id="d">–</div><div class="clab">Days</div></div>
+    <div class="cbox"><div class="cnum" id="h">–</div><div class="clab">Hours</div></div>
+    <div class="cbox"><div class="cnum" id="m">–</div><div class="clab">Mins</div></div>
+    <div class="cbox"><div class="cnum" id="s">–</div><div class="clab">Secs</div></div>
+  </div>
+
+  <!-- Event Details Card -->
+  <div class="card" id="details">
+    <div class="card-title">📅 Event Information</div>
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-label">When &amp; Time</div>
+        <div class="info-val">Saturday, Dec 12, 2026</div>
+        <div class="info-sub">4:00 PM – 8:00 PM</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Where</div>
+        <div class="info-val">Yorba Linda SDA Church</div>
+        <div class="info-sub">19401 Yorba Linda Blvd, Yorba Linda, CA</div>
+      </div>
+    </div>
+
+    <!-- Pricing Box -->
+    <div class="price-box">
+      <div class="price-title">🌮 Fresh Taco Truck Dinner</div>
+      <div class="price-row"><span>Adults</span> <b>$10 per person</b></div>
+      <div class="price-row"><span>Kids over 4 years old</span> <b>$10 per child</b></div>
+      <div class="price-row"><span>Kids 4 &amp; under</span> <b>FREE! 🎉</b></div>
+      <div class="price-row" style="margin-top:6px; color:#B23B15; font-weight:bold;">
+        <span>RSVP Deadline</span> <span>Saturday, December 5</span>
+      </div>
+    </div>
+
+    <!-- Calendar & Map Buttons -->
+    <div class="btn-row">
+      <button class="btn green" id="cal-btn" type="button">📅 Add to Calendar</button>
+      <a class="btn gold" href="https://maps.apple.com/?q=Yorba+Linda+Seventh-day+Adventist+Church,+19401+Yorba+Linda+Blvd,+Yorba+Linda,+CA+92886" target="_blank" rel="noopener">📍 Apple Maps</a>
+      <a class="btn outline" href="https://www.google.com/maps/search/?api=1&query=Yorba+Linda+Seventh-day+Adventist+Church" target="_blank" rel="noopener">🗺️ Google Maps</a>
+    </div>
+  </div>
+
+  <!-- Payment Instructions Card -->
+  <div class="card">
+    <div class="card-title">💵 How to Pay for Taco Truck</div>
+    <p style="margin:0 0 12px; font-size:14px; color:var(--muted);">
+      Please submit $10 per adult and kid over 4 to <b>Isaac Lee</b> using any method below:
+    </p>
+    <div class="pay-grid">
+      <div class="pay-card">
+        <span class="pay-badge">Venmo</span>
+        <div class="pay-val">@Isaac-Lee-20</div>
+        <span class="copy-chip" onclick="copyText('Isaac-Lee-20', 'Venmo handle copied!')">📋 Copy Handle</span>
+        <a href="https://venmo.com/Isaac-Lee-20" target="_blank" style="display:inline-block; margin-left:8px; font-size:12px; font-weight:bold; color:var(--green);">Open Venmo ↗</a>
+      </div>
+      <div class="pay-card">
+        <span class="pay-badge" style="background:#7B2CBF;">Zelle</span>
+        <div class="pay-val">ausa2u@gmail.com</div>
+        <span class="copy-chip" onclick="copyText('ausa2u@gmail.com', 'Zelle email copied!')">📋 Copy Email</span>
+      </div>
+      <div class="pay-card">
+        <span class="pay-badge" style="background:#D9822B;">Check</span>
+        <div class="pay-val">Payable to: Isaac Lee</div>
+        <div style="font-size:12px; color:var(--muted); margin-top:4px;">Hand to Isaac at church</div>
+      </div>
+      <div class="pay-card">
+        <span class="pay-badge" style="background:#555;">Cash</span>
+        <div class="pay-val">Pay at the door</div>
+        <div style="font-size:12px; color:var(--muted); margin-top:4px;">Exact change appreciated</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RSVP Sign-up Form -->
+  <div class="card" id="signup-card">
+    <div class="card-title">✍️ RSVP &amp; Sign Up</div>
+    <form id="rsvp-form">
+      <div class="field">
+        <label for="name">Family / Full Name <span class="req">*</span></label>
+        <input type="text" id="name" required placeholder="e.g. Mike &amp; Sunhee Lee" autocomplete="name">
+      </div>
+
+      <div class="field" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div>
+          <label for="phone">Phone <span class="req">*</span></label>
+          <input type="tel" id="phone" required placeholder="(714) 555-0199" autocomplete="tel">
+        </div>
+        <div>
+          <label for="email">Email <span class="req">*</span></label>
+          <input type="email" id="email" required placeholder="name@email.com" autocomplete="email">
+        </div>
+      </div>
+
+      <!-- Quantity Steppers -->
+      <div class="field">
+        <label>Number of Participants <span class="req">*</span></label>
+        <div class="num-grid">
+          <div class="stepper-box">
+            <label>Adults</label>
+            <div class="fee">$10 each</div>
+            <div class="stepper-row">
+              <button type="button" class="step-btn" onclick="adjustCount('adults', -1)">−</button>
+              <span class="step-val" id="adults-val">2</span>
+              <button type="button" class="step-btn" onclick="adjustCount('adults', 1)">+</button>
+            </div>
+          </div>
+          <div class="stepper-box">
+            <label>Kids &gt; 4</label>
+            <div class="fee">$10 each</div>
+            <div class="stepper-row">
+              <button type="button" class="step-btn" onclick="adjustCount('kids-over', -1)">−</button>
+              <span class="step-val" id="kids-over-val">0</span>
+              <button type="button" class="step-btn" onclick="adjustCount('kids-over', 1)">+</button>
+            </div>
+          </div>
+          <div class="stepper-box">
+            <label>Kids ≤ 4</label>
+            <div class="fee" style="color:var(--green);">FREE!</div>
+            <div class="stepper-row">
+              <button type="button" class="step-btn" onclick="adjustCount('kids-under', -1)">−</button>
+              <span class="step-val" id="kids-under-val">0</span>
+              <button type="button" class="step-btn" onclick="adjustCount('kids-under', 1)">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calculation Banner -->
+      <div class="calc-banner">
+        <div>
+          <div class="calc-title">Taco Truck Total</div>
+          <div class="calc-sub" id="calc-breakdown">2 Adults @ $10</div>
+        </div>
+        <div class="calc-amount" id="calc-total">$20</div>
+      </div>
+
+      <div class="field">
+        <label for="pay-method">Payment Plan</label>
+        <select id="pay-method">
+          <option value="Venmo (@Isaac-Lee-20)">Venmo (@Isaac-Lee-20)</option>
+          <option value="Zelle (ausa2u@gmail.com)">Zelle (ausa2u@gmail.com)</option>
+          <option value="Check (Isaac Lee)">Check to Isaac Lee</option>
+          <option value="Cash at door">Cash at door</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="notes">Notes / Dietary Needs <span class="sub">(optional)</span></label>
+        <textarea id="notes" rows="2" placeholder="e.g. Vegetarian tacos, allergies..."></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" class="btn" style="font-size:17px; padding:15px 24px;">🌮 Submit RSVP</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Public Attendee List -->
+  <div class="card" id="roster-card">
+    <div class="card-title">📋 Who's Coming (<span id="total-count">0</span> Attending)</div>
+    <div class="stats-bar">
+      <div>
+        <div class="stat-num" id="stat-families">0</div>
+        <div class="stat-lbl">Families</div>
+      </div>
+      <div>
+        <div class="stat-num" id="stat-adults">0</div>
+        <div class="stat-lbl">Adults</div>
+      </div>
+      <div>
+        <div class="stat-num" id="stat-kids">0</div>
+        <div class="stat-lbl">Kids</div>
+      </div>
+      <div>
+        <div class="stat-num" id="stat-total" style="color:var(--green);">0</div>
+        <div class="stat-lbl">Total Guests</div>
+      </div>
+    </div>
+
+    <table class="roster-table">
+      <thead>
+        <tr>
+          <th>Family / Name</th>
+          <th style="text-align:center;">Adults</th>
+          <th style="text-align:center;">Kids</th>
+          <th style="text-align:right;">Party Size</th>
+        </tr>
+      </thead>
+      <tbody id="roster-body">
+        <tr>
+          <td colspan="4" style="text-align:center; color:var(--muted); padding:18px;">
+            Loading attendee list...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer with Organizer Access -->
+  <footer style="text-align:center; margin-top:30px; font-size:13px; color:var(--muted);">
+    <p>Yorba Linda Seventh-day Adventist Church · Christmas 2026</p>
+    <p>
+      <a href="javascript:void(0)" onclick="toggleAdmin()" style="color:var(--muted); text-decoration:underline;">
+        🔒 Organizer Sign-in
+      </a>
+    </p>
+  </footer>
+
+  <!-- Private Organizer Panel -->
+  <div class="admin-panel" id="admin-panel">
+    <div class="admin-header">
+      <div style="font-size:18px; font-weight:bold; color:var(--green-dark);">
+        🔒 Organizer Dashboard (Private)
+      </div>
+      <button class="btn outline" style="padding:4px 10px; font-size:12px; flex:none;" onclick="toggleAdmin()">Close</button>
+    </div>
+    <p style="font-size:13px; color:var(--muted); margin:0 0 14px;">
+      This private view shows full phone numbers, emails, and payment tracking for Daren and Isaac.
+    </p>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px;">
+      <a class="btn green" style="padding:8px 14px; font-size:13px;" href="https://docs.google.com/spreadsheets/d/131NnDHX_XAA_OzVLIC7kxLE1EZw96JPWuW0aCCt17Wo/edit" target="_blank">
+        📊 Open Google Sheet
+      </a>
+      <button class="btn outline" style="padding:8px 14px; font-size:13px;" onclick="copyFullRoster()">
+        📋 Copy Contact List
+      </button>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="roster-table" style="font-size:13px;">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Guests</th>
+            <th>Due</th>
+            <th>Method</th>
+            <th>Paid?</th>
+          </tr>
+        </thead>
+        <tbody id="admin-body">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  // ---- Web Audio API Synthesizer ----
+  var ac = null, muted = false;
+  function audio() {
+    if (muted) return null;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    if (!ac) ac = new AC();
+    if (ac.state === 'suspended') ac.resume();
+    return ac;
+  }
+  function beep(freq, dur, type, gainVal, delay) {
+    var a = audio(); if (!a) return;
+    setTimeout(function() {
+      try {
+        var osc = a.createOscillator(), g = a.createGain();
+        osc.type = type || 'sine';
+        osc.frequency.setValueAtTime(freq, a.currentTime);
+        g.gain.setValueAtTime(gainVal || 0.15, a.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.0001, a.currentTime + dur);
+        osc.connect(g); g.connect(a.destination);
+        osc.start(); osc.stop(a.currentTime + dur);
+      } catch(e) {}
+    }, (delay || 0) * 1000);
+  }
+  function dropSound() {
+    beep(440 + Math.random() * 260, 0.12, 'triangle', 0.18);
+  }
+  function fanfare() {
+    [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach(function(f, i) {
+      beep(f, 0.35, 'triangle', 0.2, i * 0.1);
+    });
+  }
+
+  var sndBtn = document.getElementById('snd');
+  sndBtn.addEventListener('click', function() {
+    muted = !muted;
+    sndBtn.textContent = muted ? '🔇' : '🔊';
+    if (!muted) beep(660, 0.12, 'triangle', 0.2);
+  });
+
+  // ---- Tap Toy Mechanics ----
+  var taps = 0, MAX_TAPS = 25;
+  var platter = document.getElementById('platter');
+  var fill = document.getElementById('fill');
+  var pct = document.getElementById('pct');
+  var cue = document.getElementById('tap-cue');
+  var items = ['🌮','🌮','🥑','🍋‍🟩','🌶️','🎅','🎉','🌮','🧀'];
+
+  function dropItem(x, y) {
+    taps++;
+    var p = Math.min(Math.round((taps / MAX_TAPS) * 100), 100);
+    fill.style.height = p + '%';
+    pct.textContent = p + '% Full';
+    dropSound();
+
+    var el = document.createElement('div');
+    el.className = 'item-drop';
+    el.textContent = items[Math.floor(Math.random() * items.length)];
+    var rect = platter.getBoundingClientRect();
+    var posX = Math.max(20, Math.min(x - rect.left - 16, rect.width - 48));
+    var posY = Math.max(30, Math.min(y - rect.top - 16, rect.height - 50));
+    el.style.left = posX + 'px';
+    el.style.top = posY + 'px';
+    platter.appendChild(el);
+
+    if (taps >= MAX_TAPS && taps - 1 < MAX_TAPS) {
+      cue.innerHTML = '🎉 <b>PLATTER FULL!</b> RSVP BELOW! 🌮';
+      fanfare();
+      fireConfetti();
+    }
+  }
+
+  platter.addEventListener('pointerdown', function(e) {
+    dropItem(e.clientX, e.clientY);
+  });
+  cue.addEventListener('click', function(e) {
+    var rect = platter.getBoundingClientRect();
+    dropItem(rect.left + rect.width / 2, rect.top + rect.height / 2);
+  });
+
+  // ---- Countdown Clock ----
+  var target = new Date(2026, 11, 12, 16, 0, 0); // Dec 12, 2026 4:00 PM
+  var dEl = document.getElementById('d'), hEl = document.getElementById('h'),
+      mEl = document.getElementById('m'), sEl = document.getElementById('s');
+
+  function updateClock() {
+    var now = new Date();
+    var diff = target - now;
+    if (diff <= 0) {
+      document.getElementById('countdown').innerHTML =
+        '<div class="cbox" style="min-width:auto; padding:10px 24px;"><div class="cnum">PARTY TIME! 🌮🎉</div></div>';
+      return;
+    }
+    var secs = Math.floor(diff / 1000);
+    dEl.textContent = Math.floor(secs / 86400);
+    hEl.textContent = Math.floor((secs % 86400) / 3600);
+    mEl.textContent = Math.floor((secs % 3600) / 60);
+    sEl.textContent = secs % 60;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // ---- Steppers and Total Calculation ----
+  var counts = { adults: 2, 'kids-over': 0, 'kids-under': 0 };
+
+  window.adjustCount = function(type, delta) {
+    var next = (counts[type] || 0) + delta;
+    if (next < 0) return;
+    if (type === 'adults' && next < 1) next = 1;
+    counts[type] = next;
+    document.getElementById(type + '-val').textContent = next;
+    recalc();
+  };
+
+  function recalc() {
+    var paying = counts.adults + counts['kids-over'];
+    var total = paying * 10;
+    document.getElementById('calc-total').textContent = '$' + total;
+    var parts = [];
+    if (counts.adults) parts.push(counts.adults + ' Adult' + (counts.adults > 1 ? 's' : ''));
+    if (counts['kids-over']) parts.push(counts['kids-over'] + ' Kid' + (counts['kids-over'] > 1 ? 's' : '') + ' (>4)');
+    if (counts['kids-under']) parts.push(counts['kids-under'] + ' Free Kid' + (counts['kids-under'] > 1 ? 's' : ''));
+    document.getElementById('calc-breakdown').textContent = parts.join(' + ') || 'None';
+  }
+  recalc();
+
+  // ---- Google Sheet CSV Data Fetching ----
+  var SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/131NnDHX_XAA_OzVLIC7kxLE1EZw96JPWuW0aCCt17Wo/export?format=csv";
+  var attendees = [];
+
+  function loadAttendees() {
+    // 1. Load from local cache first
+    var local = JSON.parse(localStorage.getItem('ylsda_rsvps') || '[]');
+    attendees = local;
+    renderRosters();
+
+    // 2. Try fetching live sheet CSV
+    fetch(SHEET_CSV_URL)
+      .then(function(r) { return r.text(); })
+      .then(function(csv) {
+        var rows = parseCSV(csv);
+        if (rows.length > 1) {
+          // Merge sheet rows
+          var sheetAttendees = [];
+          for (var i = 1; i < rows.length; i++) {
+            var row = rows[i];
+            if (!row[1]) continue; // name empty
+            sheetAttendees.push({
+              time: row[0] || '',
+              name: row[1] || '',
+              email: row[2] || '',
+              phone: row[3] || '',
+              adults: parseInt(row[4], 10) || 0,
+              kidsOver: parseInt(row[5], 10) || 0,
+              kidsUnder: parseInt(row[6], 10) || 0,
+              totalDue: parseInt(row[7], 10) || 0,
+              method: row[8] || '',
+              paid: (row[9] || '').toLowerCase() === 'paid',
+              notes: row[10] || ''
+            });
+          }
+          if (sheetAttendees.length > 0) {
+            attendees = sheetAttendees;
+            renderRosters();
+          }
+        }
+      })
+      .catch(function(err) {
+        console.log("Sheet read fallback:", err);
+      });
+  }
+
+  function parseCSV(text) {
+    var lines = text.split(/\r\n|\n/);
+    return lines.map(function(line) {
+      var cells = [], inQ = false, curr = '';
+      for (var i = 0; i < line.length; i++) {
+        var c = line[i];
+        if (c === '"') { inQ = !inQ; }
+        else if (c === ',' && !inQ) { cells.push(curr.trim()); curr = ''; }
+        else { curr += c; }
+      }
+      cells.push(curr.trim());
+      return cells;
+    });
+  }
+
+  function renderRosters() {
+    var tbody = document.getElementById('roster-body');
+    var adminBody = document.getElementById('admin-body');
+    tbody.innerHTML = '';
+    if (adminBody) adminBody.innerHTML = '';
+
+    if (attendees.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--muted); padding:18px;">Be the first family to sign up! 🌮</td></tr>';
+      updateStats(0, 0, 0, 0);
+      return;
+    }
+
+    var totalFamilies = attendees.length;
+    var totalAdults = 0, totalKids = 0, totalGuests = 0;
+
+    attendees.forEach(function(att, idx) {
+      var kids = (att.kidsOver || 0) + (att.kidsUnder || 0);
+      var party = (att.adults || 0) + kids;
+      totalAdults += (att.adults || 0);
+      totalKids += kids;
+      totalGuests += party;
+
+      // Public table row (Name and Counts ONLY)
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td><strong>' + escapeHTML(att.name) + '</strong></td>'
+        + '<td style="text-align:center;"><span class="roster-badge adult">' + att.adults + '</span></td>'
+        + '<td style="text-align:center;"><span class="roster-badge kid">' + kids + '</span></td>'
+        + '<td style="text-align:right;"><strong>' + party + '</strong></td>';
+      tbody.appendChild(tr);
+
+      // Private Admin table row
+      if (adminBody) {
+        var atr = document.createElement('tr');
+        atr.innerHTML = '<td><strong>' + escapeHTML(att.name) + '</strong>' + (att.notes ? '<div style="font-size:11px; color:#B23B15;">' + escapeHTML(att.notes) + '</div>' : '') + '</td>'
+          + '<td><a href="tel:' + encodeURIComponent(att.phone) + '">' + escapeHTML(att.phone) + '</a><br>'
+          + '<a href="mailto:' + encodeURIComponent(att.email) + '" style="color:var(--muted); font-size:11px;">' + escapeHTML(att.email) + '</a></td>'
+          + '<td>' + att.adults + 'A, ' + (att.kidsOver || 0) + 'K(&gt;4), ' + (att.kidsUnder || 0) + 'K(&le;4)</td>'
+          + '<td><strong>$' + (att.totalDue || 0) + '</strong></td>'
+          + '<td>' + escapeHTML(att.method || 'Venmo') + '</td>'
+          + '<td><input type="checkbox" ' + (att.paid ? 'checked' : '') + ' onchange="togglePaid(' + idx + ', this.checked)"></td>';
+        adminBody.appendChild(atr);
+      }
+    });
+
+    updateStats(totalFamilies, totalAdults, totalKids, totalGuests);
+  }
+
+  function updateStats(fam, ad, kd, tot) {
+    document.getElementById('stat-families').textContent = fam;
+    document.getElementById('stat-adults').textContent = ad;
+    document.getElementById('stat-kids').textContent = kd;
+    document.getElementById('stat-total').textContent = tot;
+    document.getElementById('total-count').textContent = tot;
+  }
+
+  function escapeHTML(str) {
+    return (str || '').replace(/[&<>"']/g, function(m) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+    });
+  }
+
+  // ---- Form Submission ----
+  var form = document.getElementById('rsvp-form');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var name = document.getElementById('name').value.trim();
+    var phone = document.getElementById('phone').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var method = document.getElementById('pay-method').value;
+    var notes = document.getElementById('notes').value.trim();
+    var paying = counts.adults + counts['kids-over'];
+    var totalDue = paying * 10;
+
+    var newEntry = {
+      time: new Date().toLocaleString(),
+      name: name,
+      phone: phone,
+      email: email,
+      adults: counts.adults,
+      kidsOver: counts['kids-over'],
+      kidsUnder: counts['kids-under'],
+      totalDue: totalDue,
+      method: method,
+      paid: false,
+      notes: notes
+    };
+
+    // Save to local cache
+    var local = JSON.parse(localStorage.getItem('ylsda_rsvps') || '[]');
+    local.push(newEntry);
+    localStorage.setItem('ylsda_rsvps', JSON.stringify(local));
+
+    attendees.push(newEntry);
+    renderRosters();
+    fireConfetti();
+    showToast('🎉 RSVP Received! See you on Dec 12!');
+
+    // Reset fields
+    document.getElementById('name').value = '';
+    document.getElementById('phone').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('notes').value = '';
+
+    // Scroll to attendee card
+    document.getElementById('roster-card').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // ---- Organizer Dashboard Toggle ----
+  window.toggleAdmin = function() {
+    var panel = document.getElementById('admin-panel');
+    if (panel.classList.contains('open')) {
+      panel.classList.remove('open');
+      return;
+    }
+    var code = prompt("Enter organizer passcode:");
+    if (code === 'tacos2026' || code === 'ylsda') {
+      panel.classList.add('open');
+      panel.scrollIntoView({ behavior: 'smooth' });
+    } else if (code !== null) {
+      alert("Incorrect passcode.");
+    }
+  };
+
+  window.togglePaid = function(idx, checked) {
+    if (attendees[idx]) {
+      attendees[idx].paid = checked;
+      localStorage.setItem('ylsda_rsvps', JSON.stringify(attendees));
+      showToast(checked ? 'Marked as Paid ✅' : 'Marked as Unpaid');
+    }
+  };
+
+  window.copyFullRoster = function() {
+    var lines = ["Name\tPhone\tEmail\tAdults\tKids>4\tKids<=4\tDue\tMethod\tPaid\tNotes"];
+    attendees.forEach(function(a) {
+      lines.push([a.name, a.phone, a.email, a.adults, a.kidsOver, a.kidsUnder, '$' + a.totalDue, a.method, a.paid ? 'PAID' : 'UNPAID', a.notes].join('\t'));
+    });
+    copyText(lines.join('\n'), 'Full roster copied to clipboard!');
+  };
+
+  // ---- Copy Helpers ----
+  window.copyText = function(text, msg) {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(function() {
+        showToast(msg || 'Copied!');
+      });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast(msg || 'Copied!');
+    }
+  };
+
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 3000);
+  }
+
+  // ---- Add to Calendar (.ics) ----
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function icsTime(d) {
+    return d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + 'T'
+         + pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + '00Z';
+  }
+  document.getElementById('cal-btn').addEventListener('click', function() {
+    var start = new Date(Date.UTC(2026, 11, 13, 0, 0, 0)); // 4pm PST is 00:00 UTC next day
+    var end   = new Date(Date.UTC(2026, 11, 13, 4, 0, 0));
+    var ics = [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//YLSDA//Christmas Party//EN',
+      'BEGIN:VEVENT',
+      'UID:ylsda-christmas-2026@drlam.com',
+      'DTSTAMP:' + icsTime(new Date()),
+      'DTSTART:' + icsTime(start),
+      'DTEND:' + icsTime(end),
+      'SUMMARY:Yorba Linda SDA Church Christmas Party 🌮🎄',
+      'LOCATION:19401 Yorba Linda Blvd\\, Yorba Linda\\, CA 92886',
+      'DESCRIPTION:Church Christmas Party with Taco Truck! RSVP by Dec 5. $10 adults & kids over 4. Under 4 free. Venmo @Isaac-Lee-20 or Zelle ausa2u@gmail.com.',
+      'END:VEVENT', 'END:VCALENDAR'
+    ].join('\r\n');
+
+    var blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ylsda-christmas-party.ics';
+    a.click();
+    showToast('Calendar event downloaded! 📅');
+  });
+
+  // ---- Confetti Engine ----
+  function fireConfetti() {
+    var canvas = document.getElementById('confetti-canvas');
+    var ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    var pieces = [];
+    var colors = ['#C41E3A', '#2D6A4F', '#FFD166', '#E76F51', '#FFF', '#007AFF'];
+    for (var i = 0; i < 90; i++) {
+      pieces.push({
+        x: canvas.width / 2,
+        y: canvas.height * 0.4,
+        vx: (Math.random() - 0.5) * 16,
+        vy: (Math.random() - 0.8) * 18,
+        size: 6 + Math.random() * 8,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        tilt: Math.random() * 10,
+        tiltAngle: Math.random() * 3,
+        opacity: 1
+      });
+    }
+    var start = Date.now();
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      var alive = false;
+      pieces.forEach(function(p) {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.35; // gravity
+        p.tiltAngle += 0.1;
+        p.tilt = Math.sin(p.tiltAngle) * 8;
+        if (p.y < canvas.height) alive = true;
+        ctx.beginPath();
+        ctx.lineWidth = p.size / 2;
+        ctx.strokeStyle = p.color;
+        ctx.moveTo(p.x + p.tilt, p.y);
+        ctx.lineTo(p.x + p.tilt + p.size, p.y + p.size);
+        ctx.stroke();
+      });
+      if (alive && Date.now() - start < 3500) {
+        requestAnimationFrame(animate);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  // Load initial attendee list
+  loadAttendees();
+})();
+</script>
+</body>
+</html>
