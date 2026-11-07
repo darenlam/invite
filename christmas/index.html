@@ -798,10 +798,6 @@
         </select>
       </div>
 
-      <div class="field">
-        <label for="notes">Notes / Dietary Needs <span class="sub">(optional)</span></label>
-        <textarea id="notes" rows="2" placeholder="e.g. Vegetarian tacos, allergies..."></textarea>
-      </div>
 
       <div class="btn-row">
         <button type="submit" class="btn" style="font-size:17px; padding:15px 24px;">🌮 Submit RSVP</button>
@@ -1159,7 +1155,7 @@
     var phone = document.getElementById('phone').value.trim();
     var email = document.getElementById('email').value.trim();
     var method = document.getElementById('pay-method').value;
-    var notes = document.getElementById('notes').value.trim();
+    var notes = '';
     var paying = counts.adults + counts['kids-over'];
     var totalDue = paying * 10;
 
@@ -1191,7 +1187,7 @@
     document.getElementById('name').value = '';
     document.getElementById('phone').value = '';
     document.getElementById('email').value = '';
-    document.getElementById('notes').value = '';
+
 
     // Scroll to attendee card
     document.getElementById('roster-card').scrollIntoView({ behavior: 'smooth' });
