@@ -851,6 +851,17 @@
       <div class="btn-row">
         <button type="submit" class="btn" style="font-size:17px; padding:15px 24px;">🌮 Submit RSVP</button>
       </div>
+
+      <div id="rsvp-success" style="display:none; background:#E8F5E9; border:2px solid var(--green); border-radius:18px; padding:18px; margin-top:16px; text-align:center;">
+        <div style="font-size:28px;">🎉</div>
+        <div style="font-weight:bold; font-size:18px; color:var(--green-dark); margin:6px 0 4px;">You're on the list!</div>
+        <p style="font-size:14px; color:var(--ink); margin:0 0 12px;" id="success-detail"></p>
+        <div style="display:flex; flex-direction:column; gap:8px; align-items:center;">
+          <a class="btn green" id="mail-confirm-btn" href="#" style="font-size:14px; padding:11px 20px; width:100%; max-width:320px;">
+            ✉️ Send Alert to Isaac &amp; Daren
+          </a>
+        </div>
+      </div>
     </form>
   </div>
 
@@ -1247,15 +1258,35 @@
     fireConfetti();
     showToast('🎉 RSVP Received! See you on Dec 12!');
 
-    // Reset fields
+    // Show success banner with email notification button
+    var succ = document.getElementById('rsvp-success');
+    var detail = document.getElementById('success-detail');
+    var mailBtn = document.getElementById('mail-confirm-btn');
+    var totalGuests = counts.adults + counts['kids-over'] + counts['kids-under'];
+
+    detail.textContent = name + ' (' + totalGuests + ' guests) · $' + totalDue + ' via ' + method;
+    var mailSubj = encodeURIComponent('YLSDA Christmas Party RSVP: ' + name + ' (' + totalGuests + ' guests)');
+    var mailBody = encodeURIComponent(
+      'Hi Pastor Isaac and Daren,\n\n' +
+      name + ' has RSVPed for the Yorba Linda SDA Church Christmas Party!\n\n' +
+      '• Phone: ' + phone + '\n' +
+      '• Email: ' + email + '\n' +
+      '• Adults: ' + counts.adults + '\n' +
+      '• Kids over 4 ($10): ' + counts['kids-over'] + '\n' +
+      '• Kids 4 & under (free): ' + counts['kids-under'] + '\n' +
+      '• Total Headcount: ' + totalGuests + '\n' +
+      '• Total Due: $' + totalDue + '\n' +
+      '• Payment Plan: ' + method + '\n\n' +
+      'Roster sheet: https://docs.google.com/spreadsheets/d/131NnDHX_XAA_OzVLIC7kxLE1EZw96JPWuW0aCCt17Wo/edit'
+    );
+    mailBtn.href = 'mailto:ausa2u@gmail.com,darenlam@gmail.com?subject=' + mailSubj + '&body=' + mailBody;
+    succ.style.display = 'block';
+    succ.scrollIntoView({ behavior: 'smooth' });
+
+    // Reset input fields
     document.getElementById('name').value = '';
     document.getElementById('phone').value = '';
     document.getElementById('email').value = '';
-
-
-    // Scroll to attendee card
-    document.getElementById('roster-card').scrollIntoView({ behavior: 'smooth' });
-  });
 
   // ---- Organizer Dashboard Toggle ----
   window.toggleAdmin = function() {
