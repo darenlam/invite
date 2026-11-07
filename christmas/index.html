@@ -137,61 +137,94 @@
     50% { transform: translateY(-6px); }
   }
 
-  /* Platter Tank */
-  .platter-tank {
+  /* Realistic Ceramic Holiday Plate */
+  .plate-container {
     position: relative;
-    width: min(380px, 88vw);
-    height: 180px;
-    margin: 16px auto 10px;
-    background: radial-gradient(circle at 50% 60%, #FFFDF5 0%, #F5ECD7 100%);
-    border: 8px solid #E2A153;
-    border-radius: 50% / 40%;
-    box-shadow: inset 0 8px 18px rgba(0,0,0,0.12), 0 10px 0 rgba(0,0,0,0.06);
-    overflow: hidden;
+    width: min(320px, 82vw);
+    height: min(320px, 82vw);
+    margin: 18px auto 14px;
+  }
+  .holiday-plate {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #FAF8F2 65%, #EDE5D5 100%);
+    box-shadow:
+      0 18px 36px rgba(0, 0, 0, 0.2),
+      0 6px 12px rgba(0, 0, 0, 0.1),
+      inset 0 3px 6px rgba(255, 255, 255, 0.95),
+      inset 0 -5px 10px rgba(0, 0, 0, 0.14);
+    border: 14px solid #FFFDF8;
+    outline: 5px solid #C41E3A;
     cursor: pointer;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    overflow: hidden;
+    transition: transform 0.12s cubic-bezier(0.18, 1.25, 0.4, 1);
   }
-  .platter-decor {
+  .holiday-plate:active {
+    transform: scale(0.97);
+  }
+  .plate-gold-ring {
     position: absolute;
-    inset: 6px;
-    border: 2px dashed rgba(226,161,83,0.4);
-    border-radius: 50% / 40%;
+    inset: 10px;
+    border-radius: 50%;
+    border: 2px solid #D4AF37;
+    pointer-events: none;
+    opacity: 0.85;
+  }
+  .plate-well {
+    position: absolute;
+    inset: 24px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 45% 40%, #FFFFFF 0%, #FDFBF8 65%, #F4ECE0 100%);
+    box-shadow:
+      inset 0 8px 18px rgba(0, 0, 0, 0.13),
+      inset 0 -3px 8px rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(212, 175, 55, 0.35);
     pointer-events: none;
   }
-  .platter-fill {
+  .plate-watermark {
     position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 0%;
-    background: linear-gradient(180deg, rgba(231,111,81,0.25) 0%, rgba(255,209,102,0.4) 100%);
-    transition: height 0.35s ease-out;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 58px;
+    opacity: 0.12;
     pointer-events: none;
+    user-select: none;
   }
-  .platter-pct {
+  .taco-drop {
     position: absolute;
-    left: 14px;
-    bottom: 12px;
+    font-size: 34px;
+    line-height: 1;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.28));
+    animation: plate-land 0.38s cubic-bezier(0.18, 1.35, 0.4, 1) forwards;
+    pointer-events: none;
+    user-select: none;
+    z-index: 10;
+  }
+  @keyframes plate-land {
+    0% { transform: translateY(-75px) scale(0.3) rotate(-35deg); opacity: 0; }
+    70% { transform: translateY(0) scale(1.15) rotate(5deg); opacity: 1; }
+    100% { transform: translateY(0) scale(1) rotate(var(--rot, 0deg)); opacity: 1; }
+  }
+  .plate-badge {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
     background: #FFF;
     color: var(--red);
-    font-weight: bold;
-    font-size: 15px;
-    padding: 6px 12px;
+    font-weight: 800;
+    font-size: 13px;
+    padding: 6px 16px;
     border-radius: 999px;
     border: 2px solid var(--red);
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    z-index: 5;
-  }
-  .item-drop {
-    position: absolute;
-    font-size: 32px;
-    line-height: 1;
-    animation: drop-in 0.45s cubic-bezier(0.18, 1.25, 0.4, 1);
-    user-select: none;
-    pointer-events: none;
-  }
-  @keyframes drop-in {
-    from { transform: translateY(-70px) scale(0.3) rotate(-30deg); opacity: 0; }
-    to { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    z-index: 25;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
   }
   .toy-hint {
     font-size: 13px;
@@ -643,12 +676,15 @@
   <!-- Interactive Platter Tap Toy -->
   <div class="toy-section">
     <div class="tap-cue" id="tap-cue">👆 <b>TAP TO LOAD</b> THE TACO PLATTER! 🌮</div>
-    <div class="platter-tank" id="platter">
-      <div class="platter-decor"></div>
-      <div class="platter-fill" id="fill"></div>
-      <div class="platter-pct" id="pct">0% Full</div>
+    <div class="plate-container">
+      <div class="holiday-plate" id="platter">
+        <div class="plate-gold-ring"></div>
+        <div class="plate-well"></div>
+        <div class="plate-watermark">🎄</div>
+      </div>
+      <div class="plate-badge" id="pct">🌮 0 Loaded (0%)</div>
     </div>
-    <p class="toy-hint" id="toy-hint">Tap anywhere on the platter to drop tacos, limes &amp; holiday sombreros!</p>
+    <p class="toy-hint" id="toy-hint">Tap anywhere on the plate to pile on tacos, limes &amp; toppings!</p>
   </div>
 
   <!-- Countdown Clock -->
@@ -940,31 +976,46 @@
   });
 
   // ---- Tap Toy Mechanics ----
-  var taps = 0, MAX_TAPS = 25;
+  var taps = 0, MAX_TAPS = 20;
   var platter = document.getElementById('platter');
-  var fill = document.getElementById('fill');
   var pct = document.getElementById('pct');
   var cue = document.getElementById('tap-cue');
-  var items = ['🌮','🌮','🥑','🍋‍🟩','🌶️','🎅','🎉','🌮','🧀'];
+  var items = ['🌮','🌮','🥑','🍋‍🟩','🌶️','🌮','🧀','🌯','🌮'];
 
   function dropItem(x, y) {
     taps++;
     var p = Math.min(Math.round((taps / MAX_TAPS) * 100), 100);
-    fill.style.height = p + '%';
-    pct.textContent = p + '% Full';
+    pct.textContent = '🌮 ' + taps + ' Loaded (' + p + '%)';
     dropSound();
 
-    var el = document.createElement('div');
-    el.className = 'item-drop';
-    el.textContent = items[Math.floor(Math.random() * items.length)];
     var rect = platter.getBoundingClientRect();
-    var posX = Math.max(20, Math.min(x - rect.left - 16, rect.width - 48));
-    var posY = Math.max(30, Math.min(y - rect.top - 16, rect.height - 50));
-    el.style.left = posX + 'px';
-    el.style.top = posY + 'px';
+    var radius = (rect.width / 2) - 34; // stay comfortably inside the plate well
+    var centerX = rect.width / 2;
+    var centerY = rect.height / 2;
+
+    // Compute position relative to plate center
+    var clickX = (x - rect.left) - centerX;
+    var clickY = (y - rect.top) - centerY;
+    var dist = Math.sqrt(clickX * clickX + clickY * clickY);
+
+    // If tapped near edge, pull slightly inward toward plate center
+    if (dist > radius) {
+      var angle = Math.atan2(clickY, clickX);
+      clickX = Math.cos(angle) * (radius - 10 + Math.random() * 8);
+      clickY = Math.sin(angle) * (radius - 10 + Math.random() * 8);
+    }
+
+    var el = document.createElement('div');
+    el.className = 'taco-drop';
+    el.textContent = items[Math.floor(Math.random() * items.length)];
+    var rot = Math.round((Math.random() - 0.5) * 44);
+    el.style.setProperty('--rot', rot + 'deg');
+    el.style.left = (centerX + clickX - 16) + 'px';
+    el.style.top = (centerY + clickY - 16) + 'px';
     platter.appendChild(el);
 
     if (taps >= MAX_TAPS && taps - 1 < MAX_TAPS) {
+      pct.textContent = '🎉 100% Fully Loaded!';
       cue.innerHTML = '🎉 <b>PLATTER FULL!</b> RSVP BELOW! 🌮';
       fanfare();
       fireConfetti();
