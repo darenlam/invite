@@ -467,7 +467,7 @@
   }
   .num-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
   }
   .stepper-box {
@@ -494,6 +494,7 @@
     gap: 8px;
     margin-top: 6px;
   }
+
   .step-btn {
     width: 32px;
     height: 32px;
@@ -514,6 +515,13 @@
     font-weight: bold;
     min-width: 24px;
     text-align: center;
+  }
+  @media (max-width: 420px) {
+    .num-grid { gap: 6px; }
+    .stepper-box { padding: 8px 4px; }
+    .stepper-row { gap: 4px; }
+    .step-btn { width: 28px; height: 28px; }
+    .step-val { min-width: 16px; }
   }
 
   /* Live Calculation Banner */
