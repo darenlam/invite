@@ -777,7 +777,15 @@
   <!-- RSVP Sign-up Form -->
   <div class="card" id="signup-card">
     <div class="card-title">✍️ RSVP &amp; Sign Up</div>
-    <form id="rsvp-form">
+    <div style="background:#FFF9E6; border:1px solid #FFE082; border-radius:12px; padding:12px 14px; margin-bottom:16px; font-size:14px; line-height:1.4;">
+      Sign ups are connected directly to our church Google Sheet. Tap below to fill out the sign up form, and your family will appear on the guest list below!
+    </div>
+    <div class="btn-row" style="margin-bottom:16px;">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfJ3yc1-C4WyBeSc_OMlCuhr0CYhn9K4_EA0fLPuutzNpWmfA/viewform" target="_blank" class="btn" style="display:inline-block; text-decoration:none; font-size:17px; padding:15px 28px; background:var(--red); color:#FFF; font-weight:bold; border-radius:14px; box-shadow:0 4px 14px rgba(196,30,58,0.35);">
+        🌮 Click Here to RSVP &amp; Sign Up
+      </a>
+    </div>
+    <form id="rsvp-form" style="display:none;">
       <div class="field">
         <label for="name">Family / Full Name <span class="req">*</span></label>
         <input type="text" id="name" required placeholder="e.g. Mike &amp; Sunhee Lee" autocomplete="name">
@@ -1096,7 +1104,7 @@
   recalc();
 
   // ---- Google Sheet CSV Data Fetching ----
-  var SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/131NnDHX_XAA_OzVLIC7kxLE1EZw96JPWuW0aCCt17Wo/export?format=csv";
+  var SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/131NnDHX_XAA_OzVLIC7kxLE1EZw96JPWuW0aCCt17Wo/export?format=csv&gid=1929320596";
   var attendees = [];
 
   function loadAttendees() {
@@ -1105,29 +1113,45 @@
     attendees = local;
     renderRosters();
 
-    // 2. Try fetching live sheet CSV
+    // 2. Fetch live sheet CSV from Google Form responses
     fetch(SHEET_CSV_URL)
       .then(function(r) { return r.text(); })
       .then(function(csv) {
         var rows = parseCSV(csv);
         if (rows.length > 1) {
-          // Merge sheet rows
+          var header = rows[0].map(function(h) { return (h || '').toLowerCase(); });
+          var nameIdx = header.findIndex(function(h) { return h.includes('name'); });
+          var emailIdx = header.findIndex(function(h) { return h.includes('email') || h.includes('address'); });
+          var phoneIdx = header.findIndex(function(h) { return h.includes('phone'); });
+          var adultsIdx = header.findIndex(function(h) { return h.includes('adult'); });
+          var kidsOverIdx = header.findIndex(function(h) { return h.includes('> 4') || h.includes('over 4'); });
+          var kidsUnderIdx = header.findIndex(function(h) { return h.includes('under') || h.includes('free'); });
+          var methodIdx = header.findIndex(function(h) { return h.includes('payment') || h.includes('method'); });
+
+          if (nameIdx === -1) nameIdx = 2; // fallback
+
           var sheetAttendees = [];
           for (var i = 1; i < rows.length; i++) {
             var row = rows[i];
-            if (!row[1]) continue; // name empty
+            var name = (nameIdx >= 0 && row[nameIdx]) ? row[nameIdx].trim() : '';
+            if (!name) continue;
+            var adults = adultsIdx >= 0 ? parseInt(row[adultsIdx], 10) || 0 : 0;
+            var kidsOver = kidsOverIdx >= 0 ? parseInt(row[kidsOverIdx], 10) || 0 : 0;
+            var kidsUnder = kidsUnderIdx >= 0 ? parseInt(row[kidsUnderIdx], 10) || 0 : 0;
+            var totalDue = (adults + kidsOver) * 10;
+
             sheetAttendees.push({
               time: row[0] || '',
-              name: row[1] || '',
-              email: row[2] || '',
-              phone: row[3] || '',
-              adults: parseInt(row[4], 10) || 0,
-              kidsOver: parseInt(row[5], 10) || 0,
-              kidsUnder: parseInt(row[6], 10) || 0,
-              totalDue: parseInt(row[7], 10) || 0,
-              method: row[8] || '',
-              paid: (row[9] || '').toLowerCase() === 'paid',
-              notes: row[10] || ''
+              name: name,
+              email: emailIdx >= 0 ? row[emailIdx] || '' : '',
+              phone: phoneIdx >= 0 ? row[phoneIdx] || '' : '',
+              adults: adults,
+              kidsOver: kidsOver,
+              kidsUnder: kidsUnder,
+              totalDue: totalDue,
+              method: methodIdx >= 0 ? row[methodIdx] || 'Venmo' : 'Venmo',
+              paid: false,
+              notes: ''
             });
           }
           if (sheetAttendees.length > 0) {
